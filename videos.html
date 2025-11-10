@@ -26,10 +26,43 @@
       }
     </script>
     <style>
-      .gradient-bg { background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%), radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%), linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%); }
+      :root{
+        --bg: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%),
+              radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%),
+              linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%);
+        --text:#ffffff; --text-80:rgba(255,255,255,0.8); --text-70:rgba(255,255,255,0.7); --text-60:rgba(255,255,255,0.6); --text-50:rgba(255,255,255,0.5);
+        --card: rgba(255,255,255,0.06);
+        --border: rgba(255,255,255,0.08);
+      }
+      .theme-light{
+        /* Thème clair Teal/Cyan sans blanc - fond aurora plus coloré */
+        --bg:
+          conic-gradient(from 220deg at 18% 12%, rgba(6,182,212,.24), transparent 38%),
+          conic-gradient(from 120deg at 86% 22%, rgba(45,212,191,.22), transparent 42%),
+          radial-gradient(1000px 520px at 18% 78%, rgba(56,189,248,.20), transparent 60%),
+          radial-gradient(900px 480px at 82% 86%, rgba(34,211,238,.18), transparent 62%),
+          linear-gradient(135deg, #c6f7fb 0%, #b7f4ee 52%, #b8f7ff 100%);
+        --text:#0a0f10; --text-80:rgba(10,15,16,0.92); --text-70:rgba(10,15,16,0.86); --text-60:rgba(10,15,16,0.78); --text-50:rgba(10,15,16,0.68);
+        --card: rgba(6,182,212,0.16);
+        --border: rgba(6,182,212,0.30);
+      }
+      .gradient-bg { background: var(--bg); }
       .animated-gradient { background: linear-gradient(120deg, var(--g1), var(--g2), var(--g1)); background-size: 200% 200%; animation: shift 12s ease-in-out infinite; }
       @keyframes shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-      .glass { background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+      .glass { background: var(--card); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--border); }
+      .theme-light .text-white{ color: var(--text) !important; }
+      .theme-light .text-white\/80{ color: var(--text-80) !important; }
+      .theme-light .text-white\/70{ color: var(--text-70) !important; }
+      .theme-light .text-white\/60{ color: var(--text-60) !important; }
+      .theme-light .text-white\/50{ color: var(--text-50) !important; }
+      /* Hover plus visible en clair */
+      .theme-light .hover\:text-white:hover{ color:#06B6D4 !important; }
+      /* Boutons blancs -> primaires cyan en clair */
+      .theme-light .bg-white{ background-color:#06B6D4 !important; color:#0a0f10 !important; }
+      .theme-light .hover\:bg-white\/90:hover{ background-color:#0891B2 !important; color:#0a0f10 !important; }
+      /* Forcer une couleur par défaut lisible pour tout le texte en clair */
+      .theme-light{ color: var(--text); }
+      .theme-light *{ color: inherit; }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -54,12 +87,13 @@
               <option value="it">IT</option>
               <option value="zh-Hant">繁體</option>
             </select>
-            <div class="relative">
+            <div class="relative flex items-center gap-2">
               <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
               <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
                 <div id="account-email" class="text-white/70 truncate mb-2">—</div>
                 <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
               </div>
+              <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
             </div>
           </div>
         </nav>
@@ -171,6 +205,23 @@
       const accountEmail = document.getElementById('account-email');
       const logoutBtn = document.getElementById('logout');
       const langSel = document.getElementById('lang');
+      const themeBtn = document.getElementById('theme-toggle');
+
+      // THEME: apply saved theme
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      if (savedTheme === 'light') {
+        document.body.classList.add('theme-light');
+        if (themeBtn) themeBtn.textContent = '☀️';
+      } else {
+        if (themeBtn) themeBtn.textContent = '🌙';
+      }
+      if (themeBtn) {
+        themeBtn.addEventListener('click', ()=>{
+          const isLight = document.body.classList.toggle('theme-light');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeBtn.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
 
       I18N.init(langSel, 'videos');
 
