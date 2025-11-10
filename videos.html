@@ -303,12 +303,12 @@
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
         if (user) {
-          accountBtn.href = '#';
+          if (accountBtn) { accountBtn.href = '#'; accountBtn.textContent = 'Mon compte'; }
           if (accountEmail) accountEmail.textContent = user.email || '—';
-          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+          if (accountBtn) accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
           if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
         } else {
-          accountBtn.href = 'login.html';
+          if (accountBtn) { accountBtn.href = 'login.html'; accountBtn.textContent = 'Compte / Se connecter'; }
           if (accountMenu) accountMenu.classList.add('hidden');
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
         }

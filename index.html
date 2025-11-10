@@ -559,7 +559,7 @@
           }
         });
 
-        const q = query(collection(db, 'reviews'), orderBy('createdAtMs', 'desc'), limit(3));
+        const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'), limit(3));
         onSnapshot(q, (snap)=>{
           reviewsList.innerHTML = '';
           if (snap.empty) {
