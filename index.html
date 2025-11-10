@@ -89,9 +89,24 @@
       .theme-light #contact textarea {
         color: #0a0a12 !important;
       }
+      /* Titres/CTA demandés en noir en mode clair */
+      .theme-light [data-i18n="portfolio_title"], /* Portfolio */
+      .theme-light [data-i18n="services_title"],  /* Services */
+      .theme-light [data-i18n="service1_title"],  /* Shorts / TikTok */
+      .theme-light [data-i18n="portfolio_shorts"],/* Shorts */
+      .theme-light [data-i18n="portfolio_longs"], /* Vidéos longues */
+      .theme-light [data-i18n="service3_title"],  /* Jingle */
+      .theme-light [data-i18n="hero_cta_portfolio"] /* Voir portfolio */
+      { color:#0a0a12 !important; }
       /* Boutons pleins -> primaires cyan en clair */
       .theme-light .bg-white{ background-color:#06B6D4 !important; color:#0a0f10 !important; }
       .theme-light .hover\:bg-white\/90:hover{ background-color:#0891B2 !important; color:#0a0f10 !important; }
+
+      /* === Mode sombre: harmoniser boutons avec la palette brand (violet/rose) === */
+      body:not(.theme-light) .bg-white\/10{ background-color: rgba(124,58,237,0.22) !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/20:hover{ background-color: rgba(236,72,153,0.30) !important; color:#ffffff !important; }
+      body:not(.theme-light) .bg-white{ background-color:#7C3AED !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/90:hover{ background-color:#6D28D9 !important; color:#ffffff !important; }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -109,7 +124,7 @@
             <a href="#portfolio" class="hover:text-white">Portfolio</a>
             <a href="videos.html" class="hover:text-white">Vidéos</a>
             <a href="login.html" class="hover:text-white">Compte</a>
-            <a href="#avis" class="hover:text-white">Avis</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
             <a href="#contact" class="hover:text-white">Contact</a>
             <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
               <option value="fr">FR</option>
@@ -128,7 +143,36 @@
               <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
             </div>
           </div>
+          <!-- Mobile controls -->
+          <div class="md:hidden flex items-center gap-2">
+            <button id="theme-toggle-m" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
+            <button id="menu-toggle" aria-label="Menu" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20">☰</button>
+          </div>
         </nav>
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu" class="md:hidden hidden glass mt-2 rounded-2xl p-4">
+          <div class="flex flex-col gap-3 text-sm">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="#services" class="hover:text-white">Services</a>
+            <a href="#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
+            <a href="#contact" class="hover:text-white">Contact</a>
+            <hr class="border-white/10">
+            <a id="account-btn-m" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">Compte / Se connecter</a>
+            <div class="flex items-center gap-2">
+              <label class="text-white/70 text-xs">Lang</label>
+              <select id="lang-m" class="bg-white text-black rounded-xl px-3 py-2 outline-none">
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="de">DE</option>
+                <option value="it">IT</option>
+                <option value="zh-Hant">繁體</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -253,6 +297,30 @@
       </div>
     </section>
 
+    <!-- Avis -->
+    <section id="avis" class="relative">
+      <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-2xl md:text-3xl">Avis</h2>
+          <a href="reviews.html" class="text-sm text-white/70 hover:text-white">Voir tous les avis →</a>
+        </div>
+        <div id="reviews-auth-guard" class="glass rounded-xl p-4 mb-4 hidden">
+          <p>Vous devez être connecté pour laisser un avis. <a href="login.html" class="underline">Se connecter</a></p>
+        </div>
+        <form id="review-form" class="glass rounded-2xl p-4 mb-6 hidden">
+          <textarea id="review-text" rows="3" class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Écrivez votre avis..."></textarea>
+          <div class="mt-1 flex items-center justify-between text-xs">
+            <span id="review-count">0/300</span>
+            <span id="review-error" class="text-red-400"></span>
+          </div>
+          <div class="mt-3 flex justify-end">
+            <button type="submit" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20">Publier</button>
+          </div>
+        </form>
+        <div id="reviews-list" class="grid gap-3"></div>
+      </div>
+    </section>
+
     <!-- Contact -->
     <section id="contact" class="relative">
       <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
@@ -343,6 +411,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
@@ -356,6 +425,7 @@
       };
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
+      const db = getFirestore(app);
 
       const accountBtn = document.getElementById('account-btn');
       const accountMenu = document.getElementById('account-menu');
@@ -363,24 +433,51 @@
       const logoutBtn = document.getElementById('logout');
       const langSel = document.getElementById('lang');
       const themeBtn = document.getElementById('theme-toggle');
+      const themeBtnM = document.getElementById('theme-toggle-m');
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const accountBtnM = document.getElementById('account-btn-m');
+      const langSelM = document.getElementById('lang-m');
 
       // THEME: apply saved theme
       const savedTheme = localStorage.getItem('theme') || 'dark';
       if (savedTheme === 'light') {
         document.body.classList.add('theme-light');
         if (themeBtn) themeBtn.textContent = '☀️';
+        if (themeBtnM) themeBtnM.textContent = '☀️';
       } else {
         if (themeBtn) themeBtn.textContent = '🌙';
+        if (themeBtnM) themeBtnM.textContent = '🌙';
       }
       if (themeBtn) {
         themeBtn.addEventListener('click', ()=>{
           const isLight = document.body.classList.toggle('theme-light');
           localStorage.setItem('theme', isLight ? 'light' : 'dark');
           themeBtn.textContent = isLight ? '☀️' : '🌙';
+          if (themeBtnM) themeBtnM.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (themeBtnM) {
+        themeBtnM.addEventListener('click', ()=>{
+          const isLight = document.body.classList.toggle('theme-light');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeBtnM.textContent = isLight ? '☀️' : '🌙';
+          if (themeBtn) themeBtn.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', ()=>{
+          mobileMenu.classList.toggle('hidden');
         });
       }
 
       I18N.init(langSel, 'index');
+      if (langSel && langSelM) {
+        // sync selects
+        langSelM.value = I18N.getCurrentLang ? I18N.getCurrentLang() : (localStorage.getItem('lang') || 'fr');
+        langSelM.addEventListener('change', ()=>{ I18N.setLang(langSelM.value); langSel.value = langSelM.value; });
+        langSel.addEventListener('change', ()=>{ langSelM.value = langSel.value; });
+      }
 
       // Auth state UI
       onAuthStateChanged(auth, (user)=>{
@@ -390,10 +487,12 @@
           accountBtn.textContent = 'Mon compte';
           if (accountEmail) accountEmail.textContent = user.email || '—';
           accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
         } else {
           accountBtn.href = 'login.html';
           // I18N gère le label quand déconnecté
           if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
         }
       });
 
@@ -411,6 +510,96 @@
         const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
         if (!within) accountMenu.classList.add('hidden');
       });
+      // fermer menu mobile au clic lien
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', (e)=>{
+          const t = e.target;
+          if (t.tagName === 'A') mobileMenu.classList.add('hidden');
+        });
+      }
+
+      // Avis: soumission et liste en temps réel
+      const reviewForm = document.getElementById('review-form');
+      const reviewText = document.getElementById('review-text');
+      const reviewsList = document.getElementById('reviews-list');
+      const reviewCount = document.getElementById('review-count');
+      const reviewError = document.getElementById('review-error');
+
+      if (reviewForm && reviewText && reviewsList) {
+        // compteur de caractères
+        reviewText.addEventListener('input', ()=>{
+          const len = reviewText.value.length;
+          if (reviewCount) reviewCount.textContent = `${Math.min(len,300)}/300`;
+          if (len > 300) {
+            reviewText.value = reviewText.value.slice(0,300);
+            if (reviewError) reviewError.textContent = '300 caractères max.';
+            setTimeout(()=>{ if (reviewError) reviewError.textContent=''; }, 1500);
+          }
+        });
+
+        reviewForm.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const text = reviewText.value.trim();
+          if (!text) { if (reviewError) reviewError.textContent = 'Avis vide.'; return; }
+          if (text.length > 300) { if (reviewError) reviewError.textContent = '300 caractères max.'; return; }
+          const user = auth.currentUser;
+          if (!user) { alert('Veuillez vous connecter.'); return; }
+          try {
+            await addDoc(collection(db, 'reviews'), {
+              uid: user.uid,
+              email: user.email || null,
+              text,
+              createdAt: serverTimestamp(),
+              createdAtMs: Date.now()
+            });
+            reviewText.value = '';
+            if (reviewCount) reviewCount.textContent = '0/300';
+          } catch (err) {
+            if (reviewError) reviewError.textContent = "Erreur lors de l'envoi.";
+          }
+        });
+
+        const q = query(collection(db, 'reviews'), orderBy('createdAtMs', 'desc'), limit(3));
+        onSnapshot(q, (snap)=>{
+          reviewsList.innerHTML = '';
+          if (snap.empty) {
+            reviewsList.innerHTML = '<div class="text-white/60">Aucun avis pour le moment.</div>';
+            return;
+          }
+          const current = auth.currentUser;
+          snap.forEach(d => {
+            const r = d.data();
+            const div = document.createElement('div');
+            div.className = 'glass rounded-xl p-4';
+            const who = r.email ? r.email : 'Utilisateur';
+            const date = (r.createdAt && r.createdAt.toDate) ? r.createdAt.toDate() : (r.createdAtMs ? new Date(r.createdAtMs) : null);
+            const safeText = String(r.text || '').replace(/</g, '&lt;');
+            const canDel = current && current.uid === r.uid;
+            div.innerHTML = `
+              <div class="flex items-center justify-between text-xs text-white/60">
+                <span>${who}${date ? ' — ' + date.toLocaleDateString() : ''}</span>
+                ${canDel ? `<button class="review-del bg-white/10 hover:bg-white/20 px-2 py-1 rounded" data-id="${d.id}">Supprimer</button>` : ''}
+              </div>
+              <div class="mt-1">${safeText}</div>`;
+            reviewsList.appendChild(div);
+          });
+        }, (err)=>{
+          reviewsList.innerHTML = '<div class="text-red-400 text-sm">Erreur de chargement des avis.</div>';
+        });
+
+        // suppression: délégation d'événements
+        reviewsList.addEventListener('click', async (e)=>{
+          const t = e.target;
+          if (!(t && t.classList && t.classList.contains('review-del'))) return;
+          const id = t.getAttribute('data-id');
+          if (!id) return;
+          try {
+            await deleteDoc(doc(db, 'reviews', id));
+          } catch(err) {
+            alert('Suppression impossible.');
+          }
+        });
+      }
     </script>
   </body>
 </html>

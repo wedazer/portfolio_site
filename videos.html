@@ -63,6 +63,25 @@
       /* Forcer une couleur par défaut lisible pour tout le texte en clair */
       .theme-light{ color: var(--text); }
       .theme-light *{ color: inherit; }
+      /* === Mode sombre: harmoniser boutons avec la palette brand (violet/rose) === */
+      body:not(.theme-light) .bg-white\/10{ background-color: rgba(124,58,237,0.22) !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/20:hover{ background-color: rgba(236,72,153,0.30) !important; color:#ffffff !important; }
+      body:not(.theme-light) .bg-white{ background-color:#7C3AED !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/90:hover{ background-color:#6D28D9 !important; color:#ffffff !important; }
+      /* Titres/CTA demandés en noir en mode clair */
+      .theme-light [data-i18n="home.portfolio.title"],
+      .theme-light [data-i18n="portfolio.title"],
+      .theme-light [data-i18n="services.title"],
+      .theme-light [data-i18n="portfolio.shorts"],
+      .theme-light [data-i18n="portfolio.shortsTitle"],
+      .theme-light [data-i18n="portfolio.long"],
+      .theme-light [data-i18n="portfolio.longs"],
+      .theme-light [data-i18n="portfolio.longTitle"],
+      .theme-light [data-i18n="portfolio.jingle"],
+      .theme-light [data-i18n="portfolio.jingleTitle"],
+      .theme-light [data-i18n="cta.viewPortfolio"]{
+        color:#0a0a12 !important;
+      }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -78,6 +97,7 @@
             <a href="index.html#services" class="hover:text-white">Services</a>
             <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
             <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
             <a href="index.html#contact" class="hover:text-white">Contact</a>
             <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
               <option value="fr">FR</option>
@@ -96,7 +116,36 @@
               <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
             </div>
           </div>
+          <!-- Mobile controls -->
+          <div class="md:hidden flex items-center gap-2">
+            <button id="theme-toggle-m" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
+            <button id="menu-toggle" aria-label="Menu" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20">☰</button>
+          </div>
         </nav>
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu" class="md:hidden hidden glass mt-2 rounded-2xl p-4">
+          <div class="flex flex-col gap-3 text-sm">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="index.html#services" class="hover:text-white">Services</a>
+            <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
+            <a href="index.html#contact" class="hover:text-white">Contact</a>
+            <hr class="border-white/10">
+            <a id="account-btn-m" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">Compte / Se connecter</a>
+            <div class="flex items-center gap-2">
+              <label class="text-white/70 text-xs">Lang</label>
+              <select id="lang-m" class="bg-white text-black rounded-xl px-3 py-2 outline-none">
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="de">DE</option>
+                <option value="it">IT</option>
+                <option value="zh-Hant">繁體</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -206,24 +255,50 @@
       const logoutBtn = document.getElementById('logout');
       const langSel = document.getElementById('lang');
       const themeBtn = document.getElementById('theme-toggle');
+      const themeBtnM = document.getElementById('theme-toggle-m');
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const accountBtnM = document.getElementById('account-btn-m');
+      const langSelM = document.getElementById('lang-m');
 
       // THEME: apply saved theme
       const savedTheme = localStorage.getItem('theme') || 'dark';
       if (savedTheme === 'light') {
         document.body.classList.add('theme-light');
         if (themeBtn) themeBtn.textContent = '☀️';
+        if (themeBtnM) themeBtnM.textContent = '☀️';
       } else {
         if (themeBtn) themeBtn.textContent = '🌙';
+        if (themeBtnM) themeBtnM.textContent = '🌙';
       }
       if (themeBtn) {
         themeBtn.addEventListener('click', ()=>{
           const isLight = document.body.classList.toggle('theme-light');
           localStorage.setItem('theme', isLight ? 'light' : 'dark');
           themeBtn.textContent = isLight ? '☀️' : '🌙';
+          if (themeBtnM) themeBtnM.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (themeBtnM) {
+        themeBtnM.addEventListener('click', ()=>{
+          const isLight = document.body.classList.toggle('theme-light');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeBtnM.textContent = isLight ? '☀️' : '🌙';
+          if (themeBtn) themeBtn.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', ()=>{
+          mobileMenu.classList.toggle('hidden');
         });
       }
 
       I18N.init(langSel, 'videos');
+      if (langSel && langSelM) {
+        langSelM.value = I18N.getCurrentLang ? I18N.getCurrentLang() : (localStorage.getItem('lang') || 'fr');
+        langSelM.addEventListener('change', ()=>{ I18N.setLang(langSelM.value); langSel.value = langSelM.value; });
+        langSel.addEventListener('change', ()=>{ langSelM.value = langSel.value; });
+      }
 
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
@@ -231,9 +306,11 @@
           accountBtn.href = '#';
           if (accountEmail) accountEmail.textContent = user.email || '—';
           accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
         } else {
           accountBtn.href = 'login.html';
           if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
         }
       });
 
@@ -250,6 +327,12 @@
         const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
         if (!within) accountMenu.classList.add('hidden');
       });
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', (e)=>{
+          const t = e.target;
+          if (t.tagName === 'A') mobileMenu.classList.add('hidden');
+        });
+      }
     </script>
   </body>
 </html>

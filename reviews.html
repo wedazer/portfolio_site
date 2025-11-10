@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glazo — Avis</title>
+    <meta name="description" content="Tous les avis laissés par les utilisateurs">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { display: ['Sora','ui-sans-serif','system-ui'], sans: ['Poppins','ui-sans-serif','system-ui'] },
+            colors: { brand: { start: '#7C3AED', end: '#EC4899' } },
+            boxShadow: { glow: '0 0 0 2px rgba(124,58,237,0.25), 0 10px 30px rgba(236,72,153,0.25)' }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root{
+        --bg: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%),
+              radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%),
+              linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%);
+        --text:#ffffff; --text-80:rgba(255,255,255,0.8); --text-70:rgba(255,255,255,0.7); --text-60:rgba(255,255,255,0.6); --text-50:rgba(255,255,255,0.5);
+        --card: rgba(255,255,255,0.06);
+        --border: rgba(255,255,255,0.08);
+      }
+      .theme-light{
+        /* Thème clair Teal/Cyan sans blanc - fond aurora plus coloré */
+        --bg:
+          conic-gradient(from 220deg at 18% 12%, rgba(6,182,212,.24), transparent 38%),
+          conic-gradient(from 120deg at 86% 22%, rgba(45,212,191,.22), transparent 42%),
+          radial-gradient(1000px 520px at 18% 78%, rgba(56,189,248,.20), transparent 60%),
+          radial-gradient(900px 480px at 82% 86%, rgba(34,211,238,.18), transparent 62%),
+          linear-gradient(135deg, #c6f7fb 0%, #b7f4ee 52%, #b8f7ff 100%);
+        --text:#0a0f10; --text-80:rgba(10,15,16,0.92); --text-70:rgba(10,15,16,0.86); --text-60:rgba(10,15,16,0.78); --text-50:rgba(10,15,16,0.68);
+        --card: rgba(6,182,212,0.16);
+        --border: rgba(6,182,212,0.30);
+      }
+      .gradient-bg { background: var(--bg); }
+      .animated-gradient { background: linear-gradient(120deg, var(--g1), var(--g2), var(--g1)); background-size: 200% 200%; animation: shift 12s ease-in-out infinite; }
+      @keyframes shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+      .glass { background: var(--card); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--border); }
+
+      /* Light mode readability */
+      .theme-light{ color: var(--text); }
+      .theme-light *{ color: inherit; }
+      .theme-light .text-white{ color: var(--text) !important; }
+      .theme-light .text-white\/80{ color: var(--text-80) !important; }
+      .theme-light .text-white\/70{ color: var(--text-70) !important; }
+      .theme-light .text-white\/60{ color: var(--text-60) !important; }
+      .theme-light .text-white\/50{ color: var(--text-50) !important; }
+      .theme-light .hover\:text-white:hover{ color:#06B6D4 !important; }
+      .theme-light .bg-white\/10{ background-color: rgba(6,182,212,0.18) !important; }
+      .theme-light .hover\:bg-white\/20:hover{ background-color: rgba(6,182,212,0.28) !important; }
+      .theme-light .bg-white{ background-color:#06B6D4 !important; color:#0a0f10 !important; }
+      .theme-light .hover\:bg-white\/90:hover{ background-color:#0891B2 !important; color:#0a0f10 !important; }
+
+      /* Dark buttons to brand */
+      body:not(.theme-light) .bg-white\/10{ background-color: rgba(124,58,237,0.22) !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/20:hover{ background-color: rgba(236,72,153,0.30) !important; color:#ffffff !important; }
+      body:not(.theme-light) .bg-white{ background-color:#7C3AED !important; color:#ffffff !important; }
+      body:not(.theme-light) .hover\:bg-white\/90:hover{ background-color:#6D28D9 !important; color:#ffffff !important; }
+
+    </style>
+  </head>
+  <body class="gradient-bg text-white min-h-screen">
+    <header class="sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+            <span class="font-display text-lg tracking-wide">Glazo</span>
+          </div>
+          <div class="hidden md:flex items-center gap-6 text-sm text-white/80">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="index.html#services" class="hover:text-white">Services</a>
+            <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
+            <a href="index.html#contact" class="hover:text-white">Contact</a>
+            <div class="relative flex items-center gap-2">
+              <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
+              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
+                <div id="account-email" class="text-white/70 truncate mb-2">—</div>
+                <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
+              </div>
+              <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
+            </div>
+          </div>
+          <!-- Mobile controls -->
+          <div class="md:hidden flex items-center gap-2">
+            <button id="theme-toggle-m" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
+            <button id="menu-toggle" aria-label="Menu" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20">☰</button>
+          </div>
+        </nav>
+        <!-- Mobile menu panel -->
+        <div id="mobile-menu" class="md:hidden hidden glass mt-2 rounded-2xl p-4">
+          <div class="flex flex-col gap-3 text-sm">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="index.html#services" class="hover:text-white">Services</a>
+            <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="reviews.html" class="hover:text-white">Avis</a>
+            <a href="index.html#contact" class="hover:text-white">Contact</a>
+            <hr class="border-white/10">
+            <a id="account-btn-m" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition">Compte / Se connecter</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="max-w-6xl mx-auto px-4 py-10 md:py-14">
+        <h1 class="font-display text-3xl md:text-4xl mb-6">Tous les avis</h1>
+
+        <div id="reviews-auth-guard" class="glass rounded-xl p-4 mb-4 hidden">
+          <p>Vous devez être connecté pour laisser un avis. <a href="login.html" class="underline">Se connecter</a></p>
+        </div>
+        <form id="review-form" class="glass rounded-2xl p-4 mb-6 hidden">
+          <textarea id="review-text" rows="3" class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Écrivez votre avis..."></textarea>
+          <div class="mt-1 flex items-center justify-between text-xs">
+            <span id="review-count">0/300</span>
+            <span id="review-error" class="text-red-400"></span>
+          </div>
+          <div class="mt-3 flex justify-end">
+            <button type="submit" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20">Publier</button>
+          </div>
+        </form>
+
+        <div id="reviews-list" class="grid gap-3"></div>
+      </section>
+    </main>
+
+    <footer class="py-10 text-center text-xs text-white/50">© <span id="y"></span> Glazo. Tous droits réservés.</footer>
+    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
+        authDomain: "site-glazo.firebaseapp.com",
+        projectId: "site-glazo",
+        storageBucket: "site-glazo.firebasestorage.app",
+        messagingSenderId: "13557132291",
+        appId: "1:13557132291:web:80c0f3219b06100b03b236",
+        measurementId: "G-DVFXY4ZJBT"
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      const accountBtn = document.getElementById('account-btn');
+      const accountMenu = document.getElementById('account-menu');
+      const accountEmail = document.getElementById('account-email');
+      const logoutBtn = document.getElementById('logout');
+      const themeBtn = document.getElementById('theme-toggle');
+      const themeBtnM = document.getElementById('theme-toggle-m');
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const accountBtnM = document.getElementById('account-btn-m');
+
+      // THEME
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      if (savedTheme === 'light') { document.body.classList.add('theme-light'); if (themeBtn) themeBtn.textContent = '☀️'; if (themeBtnM) themeBtnM.textContent = '☀️'; }
+      else { if (themeBtn) themeBtn.textContent = '🌙'; if (themeBtnM) themeBtnM.textContent = '🌙'; }
+      if (themeBtn) {
+        themeBtn.addEventListener('click', ()=>{
+          const isLight = document.body.classList.toggle('theme-light');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeBtn.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (themeBtnM) {
+        themeBtnM.addEventListener('click', ()=>{
+          const isLight = document.body.classList.toggle('theme-light');
+          localStorage.setItem('theme', isLight ? 'light' : 'dark');
+          themeBtnM.textContent = isLight ? '☀️' : '🌙';
+          if (themeBtn) themeBtn.textContent = isLight ? '☀️' : '🌙';
+        });
+      }
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', ()=>{ mobileMenu.classList.toggle('hidden'); });
+      }
+
+      onAuthStateChanged(auth, (user)=>{
+        if (user) {
+          accountBtn.href = '#';
+          if (accountEmail) accountEmail.textContent = user.email || '—';
+          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
+        } else {
+          accountBtn.href = 'login.html';
+          if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
+        }
+
+        // Guard vs form
+        const authGuard = document.getElementById('reviews-auth-guard');
+        const reviewForm = document.getElementById('review-form');
+        if (authGuard && reviewForm) {
+          if (user) { authGuard.classList.add('hidden'); reviewForm.classList.remove('hidden'); }
+          else { authGuard.classList.remove('hidden'); reviewForm.classList.add('hidden'); }
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async ()=>{
+          await signOut(auth);
+          accountMenu.classList.add('hidden');
+          window.location.href = 'index.html';
+        });
+      }
+
+      document.addEventListener('click', (e)=>{
+        if (!accountMenu || accountMenu.classList.contains('hidden')) return;
+        const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
+        if (!within) accountMenu.classList.add('hidden');
+      });
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', (e)=>{
+          const t = e.target;
+          if (t.tagName === 'A') mobileMenu.classList.add('hidden');
+        });
+      }
+
+      // Reviews listing + submit
+      const reviewForm = document.getElementById('review-form');
+      const reviewText = document.getElementById('review-text');
+      const reviewsList = document.getElementById('reviews-list');
+      const reviewCount = document.getElementById('review-count');
+      const reviewError = document.getElementById('review-error');
+
+      if (reviewForm && reviewText && reviewsList) {
+        // compteur
+        reviewText.addEventListener('input', ()=>{
+          const len = reviewText.value.length;
+          if (reviewCount) reviewCount.textContent = `${Math.min(len,300)}/300`;
+          if (len > 300) {
+            reviewText.value = reviewText.value.slice(0,300);
+            if (reviewError) reviewError.textContent = '300 caractères max.';
+            setTimeout(()=>{ if (reviewError) reviewError.textContent=''; }, 1500);
+          }
+        });
+
+        reviewForm.addEventListener('submit', async (e)=>{
+          e.preventDefault();
+          const text = reviewText.value.trim();
+          if (!text) { if (reviewError) reviewError.textContent = 'Avis vide.'; return; }
+          if (text.length > 300) { if (reviewError) reviewError.textContent = '300 caractères max.'; return; }
+          const user = auth.currentUser;
+          if (!user) { alert('Veuillez vous connecter.'); return; }
+          try {
+            await addDoc(collection(db, 'reviews'), { uid: user.uid, email: user.email || null, text, createdAt: serverTimestamp(), createdAtMs: Date.now() });
+            reviewText.value = '';
+            if (reviewCount) reviewCount.textContent = '0/300';
+          } catch(err) {
+            if (reviewError) reviewError.textContent = "Erreur lors de l'envoi.";
+          }
+        });
+
+        const q = query(collection(db, 'reviews'), orderBy('createdAtMs', 'desc'));
+        onSnapshot(q, (snap)=>{
+          reviewsList.innerHTML = '';
+          if (snap.empty) { reviewsList.innerHTML = '<div class="text-white/60">Aucun avis pour le moment.</div>'; return; }
+          const current = auth.currentUser;
+          snap.forEach(d=>{
+            const r = d.data();
+            const who = r.email ? r.email : 'Utilisateur';
+            const date = (r.createdAt && r.createdAt.toDate) ? r.createdAt.toDate() : (r.createdAtMs ? new Date(r.createdAtMs) : null);
+            const safeText = String(r.text || '').replace(/</g, '&lt;');
+            const div = document.createElement('div');
+            const canDel = current && current.uid === r.uid;
+            div.className = 'glass rounded-xl p-4';
+            div.innerHTML = `<div class="flex items-center justify-between text-xs text-white/60"><span>${who}${date ? ' — ' + date.toLocaleDateString() : ''}</span>${canDel ? `<button class="review-del bg-white/10 hover:bg-white/20 px-2 py-1 rounded" data-id="${d.id}">Supprimer</button>`: ''}</div><div class="mt-1">${safeText}</div>`;
+            reviewsList.appendChild(div);
+          });
+        });
+
+        reviewsList.addEventListener('click', async (e)=>{
+          const t = e.target;
+          if (!(t && t.classList && t.classList.contains('review-del'))) return;
+          const id = t.getAttribute('data-id');
+          if (!id) return;
+          try { await deleteDoc(doc(db, 'reviews', id)); }
+          catch(err){ alert('Suppression impossible.'); }
+        });
+      }
+    </script>
+  </body>
+</html>
