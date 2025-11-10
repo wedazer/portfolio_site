@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Créer un compte • Glazo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { fontFamily: { display: ['Sora','ui-sans-serif','system-ui'], sans: ['Poppins','ui-sans-serif','system-ui'] }, boxShadow: { glow:'0 0 0 2px rgba(124,58,237,0.25), 0 10px 30px rgba(236,72,153,0.25)'} } } }
+    </script>
+    <style>
+      .gradient-bg { background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%), radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%), linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%); }
+      .glass { background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    </style>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  </head>
+  <body class="gradient-bg text-white min-h-screen">
+    <header class="sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl" style="background:linear-gradient(120deg,#7C3AED,#EC4899,#7C3AED);background-size:200% 200%"></div>
+            <span class="font-display text-lg tracking-wide">Glazo</span>
+          </div>
+          <div class="hidden md:flex items-center gap-6 text-sm text-white/80">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="login.html" class="hover:text-white">Compte</a>
+            <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
+              <option value="fr">FR</option>
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="de">DE</option>
+              <option value="it">IT</option>
+              <option value="zh-Hant">繁體</option>
+            </select>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-4 py-10 md:py-14">
+      <h1 class="font-display text-3xl mb-6" data-i18n="auth_signup_title">Créer un compte</h1>
+      <form id="signup-form" class="glass rounded-2xl p-6 grid gap-4">
+        <div>
+          <label class="text-sm text-white/70" data-i18n="auth_email">Email</label>
+          <input id="email" type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" required />
+        </div>
+        <div>
+          <label class="text-sm text-white/70" data-i18n="auth_password">Mot de passe</label>
+          <input id="password" type="password" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" minlength="6" required />
+        </div>
+        <div>
+          <div class="h-captcha" data-sitekey="0eba4cf4-545c-432c-91cc-5e540e26ee58"></div>
+        </div>
+        <button class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition" data-i18n="auth_create_account">Créer le compte</button>
+        <p id="msg" class="text-sm text-white/70"></p>
+        <div class="text-sm text-white/60"><span data-i18n="auth_already_account">Déjà un compte ?</span> <a href="login.html" class="underline" data-i18n="auth_sign_in">Se connecter</a></div>
+      </form>
+    </main>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
+        authDomain: "site-glazo.firebaseapp.com",
+        projectId: "site-glazo",
+        storageBucket: "site-glazo.firebasestorage.app",
+        messagingSenderId: "13557132291",
+        appId: "1:13557132291:web:80c0f3219b06100b03b236",
+        measurementId: "G-DVFXY4ZJBT"
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      const form = document.getElementById('signup-form');
+      const msg = document.getElementById('msg');
+      let lastCreatedUser = null;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = '';
+        const token = (await hcaptcha.getResponse()) || '';
+        if (!token) { msg.textContent = 'Veuillez compléter le CAPTCHA.'; return; }
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          lastCreatedUser = cred.user;
+          await sendEmailVerification(cred.user);
+          msg.textContent = 'Compte créé. Un email de vérification a été envoyé. Vérifiez votre boîte mail puis connectez-vous.';
+        } catch (err) {
+          msg.textContent = err.message;
+        } finally {
+          hcaptcha.reset();
+        }
+      });
+    </script>
+    <script>
+      // Renvoi manuel de l'email de vérification si nécessaire
+      document.addEventListener('click', async (e)=>{
+        if(e.target && e.target.id === 'resend-verify'){ e.preventDefault();
+          try{
+            const auth = window.firebaseAuthInstance || null;
+          }catch{}
+        }
+      });
+    </script>
+    <script type="module">
+      import { I18N } from "./assets/i18n.js";
+      const langSel = document.getElementById('lang');
+      I18N.init(langSel, 'signup');
+    </script>
+  </body>
+</html>

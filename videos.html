@@ -46,9 +46,21 @@
             <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
             <a href="videos.html" class="hover:text-white">Vidéos</a>
             <a href="index.html#contact" class="hover:text-white">Contact</a>
-            <a href="index.html#contact" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
-              <span>Me contacter</span>
-            </a>
+            <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
+              <option value="fr">FR</option>
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="de">DE</option>
+              <option value="it">IT</option>
+              <option value="zh-Hant">繁體</option>
+            </select>
+            <div class="relative">
+              <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
+              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
+                <div id="account-email" class="text-white/70 truncate mb-2">—</div>
+                <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
+              </div>
+            </div>
           </div>
         </nav>
       </div>
@@ -56,7 +68,7 @@
 
     <main>
       <section class="max-w-6xl mx-auto px-4 py-10 md:py-14">
-        <h1 class="font-display text-3xl md:text-4xl mb-2">Toutes les vidéos</h1>
+        <h1 id="title-all-videos" class="font-display text-3xl md:text-4xl mb-2">Toutes les vidéos</h1>
 
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
 
@@ -137,5 +149,56 @@
     <footer class="py-10 text-center text-xs text-white/50">© <span id="y"></span> Glazo. Tous droits réservés.</footer>
     <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
   
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { I18N } from "./assets/i18n.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
+        authDomain: "site-glazo.firebaseapp.com",
+        projectId: "site-glazo",
+        storageBucket: "site-glazo.firebasestorage.app",
+        messagingSenderId: "13557132291",
+        appId: "1:13557132291:web:80c0f3219b06100b03b236",
+        measurementId: "G-DVFXY4ZJBT"
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      const accountBtn = document.getElementById('account-btn');
+      const accountMenu = document.getElementById('account-menu');
+      const accountEmail = document.getElementById('account-email');
+      const logoutBtn = document.getElementById('logout');
+      const langSel = document.getElementById('lang');
+
+      I18N.init(langSel, 'videos');
+
+      onAuthStateChanged(auth, (user)=>{
+        I18N.setAuthState(user);
+        if (user) {
+          accountBtn.href = '#';
+          if (accountEmail) accountEmail.textContent = user.email || '—';
+          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+        } else {
+          accountBtn.href = 'login.html';
+          if (accountMenu) accountMenu.classList.add('hidden');
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async ()=>{
+          await signOut(auth);
+          accountMenu.classList.add('hidden');
+          window.location.href = 'index.html';
+        });
+      }
+
+      document.addEventListener('click', (e)=>{
+        if (!accountMenu || accountMenu.classList.contains('hidden')) return;
+        const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
+        if (!within) accountMenu.classList.add('hidden');
+      });
+    </script>
   </body>
 </html>

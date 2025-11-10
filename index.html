@@ -66,11 +66,24 @@
             <a href="#services" class="hover:text-white">Services</a>
             <a href="#portfolio" class="hover:text-white">Portfolio</a>
             <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="login.html" class="hover:text-white">Compte</a>
             <a href="#avis" class="hover:text-white">Avis</a>
             <a href="#contact" class="hover:text-white">Contact</a>
-            <a href="#contact" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
-              <span>Me contacter</span>
-            </a>
+            <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
+              <option value="fr">FR</option>
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="de">DE</option>
+              <option value="it">IT</option>
+              <option value="zh-Hant">繁體</option>
+            </select>
+            <div class="relative">
+              <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
+              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
+                <div id="account-email" class="text-white/70 truncate mb-2">—</div>
+                <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
+              </div>
+            </div>
           </div>
         </nav>
       </div>
@@ -83,21 +96,21 @@
           <div>
             <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs text-white/80 mb-5">
               <span class="w-2 h-2 rounded-full animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;"></span>
-              <span>Abordable</span>
+              <span data-i18n="hero_badge_1">Abordable</span>
               <span class="opacity-40">•</span>
-              <span>À l'écoute des retours</span>
+              <span data-i18n="hero_badge_2">À l'écoute des retours</span>
             </div>
-            <h1 class="font-display text-4xl md:text-6xl font-semibold leading-tight">
+            <h1 class="font-display text-4xl md:text-6xl font-semibold leading-tight" data-i18n-html="hero_h1_html">
               Montage vidéo <span class="text-transparent bg-clip-text animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;">créatif</span> pour créateurs
             </h1>
             <p class="mt-5 text-white/70 max-w-xl">
               ............................TEXTE...............................................
             </p>
             <div class="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#portfolio" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
+              <a href="#portfolio" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow" data-i18n="hero_cta_portfolio">
                 Voir portfolio
               </a>
-              <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition">
+              <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition" data-i18n="hero_cta_contact">
                 Me contacter
               </a>
             </div>
@@ -106,7 +119,7 @@
             <div class="aspect-[4/3] rounded-3xl glass overflow-hidden relative">
               <div class="absolute inset-0 animated-gradient opacity-60" style="--g1:#7C3AED; --g2:#EC4899;"></div>
               <div class="absolute inset-0 flex items-center justify-center">
-                <div class="glass rounded-2xl px-4 py-2 text-sm"> Aperçu portfolio </div>
+                <div class="glass rounded-2xl px-4 py-2 text-sm" data-i18n="hero_preview_label"> Aperçu portfolio </div>
               </div>
               <img alt="Preview" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover mix-blend-overlay"/>
             </div>
@@ -118,25 +131,25 @@
     <!-- Services -->
     <section id="services" class="relative">
       <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
-        <h2 class="font-display text-2xl md:text-3xl mb-6">Services</h2>
+        <h2 class="font-display text-2xl md:text-3xl mb-6" data-i18n="services_title">Services</h2>
         <div class="grid md:grid-cols-3 gap-6">
           <!-- Card 1 -->
           <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
             <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#7C3AED; --g2:#EC4899;"></div>
-            <h3 class="font-semibold">Shorts / TikTok</h3>
-            <p class="text-sm text-white/70 mt-2">Cuts dynamiques, sous-titres stylés.</p>
+            <h3 class="font-semibold" data-i18n="service1_title">Shorts / TikTok</h3>
+            <p class="text-sm text-white/70 mt-2" data-i18n="service1_desc">Cuts dynamiques, sous-titres stylés.</p>
           </div>
           <!-- Card 2 -->
           <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
             <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#EC4899; --g2:#7C3AED;"></div>
-            <h3 class="font-semibold">Vidéos longues</h3>
-            <p class="text-sm text-white/70 mt-2">Narration, rythme, habillage graphique, export multi-plateformes.</p>
+            <h3 class="font-semibold" data-i18n="service2_title">Vidéos longues</h3>
+            <p class="text-sm text-white/70 mt-2" data-i18n="service2_desc">Narration, rythme, habillage graphique, export multi-plateformes.</p>
           </div>
           <!-- Card 3 -->
           <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
             <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#8B5CF6; --g2:#06B6D4;"></div>
-            <h3 class="font-semibold">Jingle</h3>
-            <p class="text-sm text-white/70 mt-2">Intro/outro, logo reveal, sonorités percutantes.</p>
+            <h3 class="font-semibold" data-i18n="service3_title">Jingle</h3>
+            <p class="text-sm text-white/70 mt-2" data-i18n="service3_desc">Intro/outro, logo reveal, sonorités percutantes.</p>
           </div>
         </div>
       </div>
@@ -146,52 +159,52 @@
     <section id="portfolio" class="relative">
       <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="font-display text-2xl md:text-3xl">Portfolio</h2>
-          <a href="#contact" class="text-sm text-white/70 hover:text-white">Demander plus d'exemples →</a>
+          <h2 class="font-display text-2xl md:text-3xl" data-i18n="portfolio_title">Portfolio</h2>
+          <a href="#contact" class="text-sm text-white/70 hover:text-white" data-i18n="portfolio_more">Demander plus d'exemples →</a>
         </div>
         <!-- Shorts -->
-        <div class="text-sm text-white/60 mb-3">Shorts</div>
+        <div class="text-sm text-white/60 mb-3" data-i18n="portfolio_shorts">Shorts</div>
         <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[9/16] md:aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/jLbvMOBwySY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/shorts/jLbvMOBwySY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/shorts/jLbvMOBwySY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[9/16] md:aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/VbWBuFPtlqY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/shorts/VbWBuFPtlqY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/shorts/VbWBuFPtlqY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[9/16] md:aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/bzO7cSer04s" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/shorts/bzO7cSer04s" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/shorts/bzO7cSer04s" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[9/16] md:aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/-XHLH_bICNI" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/shorts/-XHLH_bICNI" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/shorts/-XHLH_bICNI" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
         </div>
 
         <!-- Vidéos longues -->
-        <div class="text-sm text-white/60 mt-10 mb-3">Vidéos longues</div>
+        <div class="text-sm text-white/60 mt-10 mb-3" data-i18n="portfolio_longs">Vidéos longues</div>
         <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/N_0jMszGsGA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/watch?v=N_0jMszGsGA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/watch?v=N_0jMszGsGA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
           <div class="glass rounded-2xl overflow-hidden">
             <div class="aspect-[16/9] w-full">
               <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/o6mwDyeyQRU" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </div>
-            <a href="https://www.youtube.com/watch?v=o6mwDyeyQRU" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+            <a href="https://www.youtube.com/watch?v=o6mwDyeyQRU" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2" data-i18n="open_youtube">Ouvrir sur YouTube ↗</a>
           </div>
         </div>
       </div>
@@ -202,34 +215,141 @@
       <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
         <div class="grid md:grid-cols-2 gap-8 items-start">
           <div>
-            <h2 class="font-display text-2xl md:text-3xl">Contact :</h2>
+            <h2 class="font-display text-2xl md:text-3xl" data-i18n="contact_title">Contact :</h2>
             <div class="mt-6 flex flex-col gap-3 text-sm">
-              <a href="mailto:contact@example.com" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">email : glazo.montage@gmail.com</a>
-              <a href="#" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">Instagram : @glazo.montage </a>
-              <a href="#" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">Discord : glazo_</a>
+              <div class="glass px-4 py-2 rounded-xl hover:shadow-glow transition flex items-center justify-between">
+                <span class="select-text"><span data-i18n="contact_email_label">email :</span> glazo.montage@gmail.com</span>
+                <button id="copy-email" class="text-xs px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20">📋 Copier</button>
+              </div>
+              <a href="https://www.instagram.com/glazo.montage/" target="_blank" rel="noopener" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition"><span data-i18n="contact_instagram_label">Instagram :</span> @glazo.montage</a>
+              <div class="glass px-4 py-2 rounded-xl hover:shadow-glow transition flex items-center justify-between">
+                <span class="select-text"><span data-i18n="contact_discord_label">Discord :</span> glazo_</span>
+                <button id="copy-discord" class="text-xs px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20">📋 Copier</button>
+              </div>
 
             </div>
           </div>
           <form class="glass rounded-2xl p-6 grid gap-4">
             <div>
-              <label class="text-sm text-white/70">Nom</label>
-              <input class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Ton nom"/>
+              <label class="text-sm text-white/70" data-i18n="form_name_label">Nom</label>
+              <input class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_name_ph" placeholder="Ton nom"/>
             </div>
             <div>
-              <label class="text-sm text-white/70">Email</label>
-              <input type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="ton@email.com"/>
+              <label class="text-sm text-white/70" data-i18n="form_email_label">Email</label>
+              <input type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_email_ph" placeholder="ton@email.com"/>
             </div>
             <div>
-              <label class="text-sm text-white/70">Message</label>
-              <textarea rows="4" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Parle-moi de ton projet..."></textarea>
+              <label class="text-sm text-white/70" data-i18n="form_message_label">Message</label>
+              <textarea rows="4" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_message_ph" placeholder="Parle-moi de ton projet..."></textarea>
             </div>
-            <button type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition">Envoyer</button>
+            <button type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition" data-i18n="form_send">Envoyer</button>
           </form>
         </div>
       </div>
     </section>
 
     <footer class="py-10 text-center text-xs text-white/50">© <span id="y"></span> Glazo. Tous droits réservés.</footer>
-    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+    <script>
+      document.getElementById('y').textContent = new Date().getFullYear();
+      (function(){
+        const btn = document.getElementById('copy-email');
+        if(!btn) return;
+        const email = 'glazo.montage@gmail.com';
+        btn.addEventListener('click', async function(){
+          try {
+            await navigator.clipboard.writeText(email);
+            const prev = btn.textContent;
+            btn.textContent = btn.dataset.copied || '✔ Copié';
+            setTimeout(()=> btn.textContent = prev, 1200);
+          } catch(e) {
+            // fallback: sélection du texte
+            const range = document.createRange();
+            const span = btn.previousElementSibling;
+            if(span){
+              range.selectNodeContents(span);
+              const sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+            }
+          }
+        });
+      })();
+      (function(){
+        const btn = document.getElementById('copy-discord');
+        if(!btn) return;
+        const user = 'glazo_';
+        btn.addEventListener('click', async function(){
+          try {
+            await navigator.clipboard.writeText(user);
+            const prev = btn.textContent;
+            btn.textContent = btn.dataset.copied || '✔ Copié';
+            setTimeout(()=> btn.textContent = prev, 1200);
+          } catch(e) {
+            const range = document.createRange();
+            const span = btn.previousElementSibling;
+            if(span){
+              range.selectNodeContents(span);
+              const sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+            }
+          }
+        });
+      })();
+    </script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { I18N } from "./assets/i18n.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
+        authDomain: "site-glazo.firebaseapp.com",
+        projectId: "site-glazo",
+        storageBucket: "site-glazo.firebasestorage.app",
+        messagingSenderId: "13557132291",
+        appId: "1:13557132291:web:80c0f3219b06100b03b236",
+        measurementId: "G-DVFXY4ZJBT"
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      const accountBtn = document.getElementById('account-btn');
+      const accountMenu = document.getElementById('account-menu');
+      const accountEmail = document.getElementById('account-email');
+      const logoutBtn = document.getElementById('logout');
+      const langSel = document.getElementById('lang');
+      I18N.init(langSel, 'index');
+
+      // Auth state UI
+      onAuthStateChanged(auth, (user)=>{
+        I18N.setAuthState(user);
+        if (user) {
+          accountBtn.href = '#';
+          accountBtn.textContent = 'Mon compte';
+          if (accountEmail) accountEmail.textContent = user.email || '—';
+          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
+        } else {
+          accountBtn.href = 'login.html';
+          // I18N gère le label quand déconnecté
+          if (accountMenu) accountMenu.classList.add('hidden');
+        }
+      });
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async ()=>{
+          await signOut(auth);
+          accountMenu.classList.add('hidden');
+          window.location.href = 'index.html';
+        });
+      }
+
+      // Fermer le menu au clic extérieur
+      document.addEventListener('click', (e)=>{
+        if (!accountMenu || accountMenu.classList.contains('hidden')) return;
+        const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
+        if (!within) accountMenu.classList.add('hidden');
+      });
+    </script>
   </body>
 </html>
