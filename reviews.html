@@ -145,6 +145,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
       import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
@@ -193,13 +194,16 @@
       }
 
       onAuthStateChanged(auth, (user)=>{
+        if (I18N && I18N.setAuthState) I18N.setAuthState(user);
         if (user) {
           accountBtn.href = '#';
+          if (accountBtn) accountBtn.textContent = 'Mon compte';
           if (accountEmail) accountEmail.textContent = user.email || '—';
           accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
           if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
         } else {
           accountBtn.href = 'login.html';
+          if (accountBtn) accountBtn.textContent = 'Compte / Se connecter';
           if (accountMenu) accountMenu.classList.add('hidden');
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
         }
