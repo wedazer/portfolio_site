@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glazo — Montage vidéo</title>
+    <meta name="description" content="Abordable • À l'écoute des retours • Shorts/TikTok, Vidéos longues, Jingle">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Sora', 'ui-sans-serif', 'system-ui'],
+              sans: ['Poppins', 'ui-sans-serif', 'system-ui']
+            },
+            colors: {
+              brand: {
+                start: '#7C3AED', // violet
+                end: '#EC4899'    // rose
+              }
+            },
+            boxShadow: {
+              glow: '0 0 0 2px rgba(124,58,237,0.25), 0 10px 30px rgba(236,72,153,0.25)'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .gradient-bg {
+        background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%),
+                    radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%),
+                    linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%);
+      }
+      .animated-gradient {
+        background: linear-gradient(120deg, var(--g1), var(--g2), var(--g1));
+        background-size: 200% 200%;
+        animation: shift 12s ease-in-out infinite;
+      }
+      @keyframes shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+      .glass {
+        background: rgba(255, 255, 255, 0.06);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+    </style>
+  </head>
+  <body class="gradient-bg text-white min-h-screen">
+    <!-- Nav -->
+    <header class="sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+            <span class="font-display text-lg tracking-wide">Glazo</span>
+          </div>
+          <div class="hidden md:flex items-center gap-6 text-sm text-white/80">
+            <a href="index.html" class="hover:text-white">Home</a>
+            <a href="#services" class="hover:text-white">Services</a>
+            <a href="#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="#avis" class="hover:text-white">Avis</a>
+            <a href="#contact" class="hover:text-white">Contact</a>
+            <a href="#contact" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
+              <span>Me contacter</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative">
+      <div class="max-w-6xl mx-auto px-4 py-20 md:py-28">
+        <div class="grid md:grid-cols-2 items-center gap-10">
+          <div>
+            <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1.5 text-xs text-white/80 mb-5">
+              <span class="w-2 h-2 rounded-full animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;"></span>
+              <span>Abordable</span>
+              <span class="opacity-40">•</span>
+              <span>À l'écoute des retours</span>
+            </div>
+            <h1 class="font-display text-4xl md:text-6xl font-semibold leading-tight">
+              Montage vidéo <span class="text-transparent bg-clip-text animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;">créatif</span> pour créateurs
+            </h1>
+            <p class="mt-5 text-white/70 max-w-xl">
+              ............................TEXTE...............................................
+            </p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#portfolio" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
+                Voir portfolio
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition">
+                Me contacter
+              </a>
+            </div>
+          </div>
+          <div>
+            <div class="aspect-[4/3] rounded-3xl glass overflow-hidden relative">
+              <div class="absolute inset-0 animated-gradient opacity-60" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="glass rounded-2xl px-4 py-2 text-sm"> Aperçu portfolio </div>
+              </div>
+              <img alt="Preview" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop" class="w-full h-full object-cover mix-blend-overlay"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="relative">
+      <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
+        <h2 class="font-display text-2xl md:text-3xl mb-6">Services</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Card 1 -->
+          <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
+            <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+            <h3 class="font-semibold">Shorts / TikTok</h3>
+            <p class="text-sm text-white/70 mt-2">Cuts dynamiques, sous-titres stylés.</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
+            <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#EC4899; --g2:#7C3AED;"></div>
+            <h3 class="font-semibold">Vidéos longues</h3>
+            <p class="text-sm text-white/70 mt-2">Narration, rythme, habillage graphique, export multi-plateformes.</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="glass rounded-2xl p-6 hover:shadow-glow transition">
+            <div class="w-10 h-10 rounded-lg animated-gradient mb-4" style="--g1:#8B5CF6; --g2:#06B6D4;"></div>
+            <h3 class="font-semibold">Jingle</h3>
+            <p class="text-sm text-white/70 mt-2">Intro/outro, logo reveal, sonorités percutantes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portfolio" class="relative">
+      <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-display text-2xl md:text-3xl">Portfolio</h2>
+          <a href="#contact" class="text-sm text-white/70 hover:text-white">Demander plus d'exemples →</a>
+        </div>
+        <!-- Shorts -->
+        <div class="text-sm text-white/60 mb-3">Shorts</div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[9/16] md:aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/jLbvMOBwySY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/jLbvMOBwySY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[9/16] md:aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/VbWBuFPtlqY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/VbWBuFPtlqY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[9/16] md:aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/bzO7cSer04s" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/bzO7cSer04s" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[9/16] md:aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/-XHLH_bICNI" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/-XHLH_bICNI" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+        </div>
+
+        <!-- Vidéos longues -->
+        <div class="text-sm text-white/60 mt-10 mb-3">Vidéos longues</div>
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/N_0jMszGsGA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=N_0jMszGsGA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/o6mwDyeyQRU" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=o6mwDyeyQRU" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="relative">
+      <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+          <div>
+            <h2 class="font-display text-2xl md:text-3xl">Contact :</h2>
+            <div class="mt-6 flex flex-col gap-3 text-sm">
+              <a href="mailto:contact@example.com" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">email : glazo.montage@gmail.com</a>
+              <a href="#" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">Instagram : @glazo.montage </a>
+              <a href="#" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition">Discord : glazo_</a>
+
+            </div>
+          </div>
+          <form class="glass rounded-2xl p-6 grid gap-4">
+            <div>
+              <label class="text-sm text-white/70">Nom</label>
+              <input class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Ton nom"/>
+            </div>
+            <div>
+              <label class="text-sm text-white/70">Email</label>
+              <input type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="ton@email.com"/>
+            </div>
+            <div>
+              <label class="text-sm text-white/70">Message</label>
+              <textarea rows="4" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Parle-moi de ton projet..."></textarea>
+            </div>
+            <button type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-10 text-center text-xs text-white/50">© <span id="y"></span> Glazo. Tous droits réservés.</footer>
+    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glazo — Toutes les vidéos</title>
+    <meta name="description" content="Toutes les vidéos YouTube/TikTok de Glazo">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Sora', 'ui-sans-serif', 'system-ui'],
+              sans: ['Poppins', 'ui-sans-serif', 'system-ui']
+            },
+            colors: { brand: { start: '#7C3AED', end: '#EC4899' } },
+            boxShadow: { glow: '0 0 0 2px rgba(124,58,237,0.25), 0 10px 30px rgba(236,72,153,0.25)' }
+          }
+        }
+      }
+    </script>
+    <style>
+      .gradient-bg { background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,.25), transparent 60%), radial-gradient(1000px 500px at 90% 20%, rgba(236,72,153,.25), transparent 60%), linear-gradient(135deg, #0b0b12 0%, #0e0b17 100%); }
+      .animated-gradient { background: linear-gradient(120deg, var(--g1), var(--g2), var(--g1)); background-size: 200% 200%; animation: shift 12s ease-in-out infinite; }
+      @keyframes shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+      .glass { background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    </style>
+  </head>
+  <body class="gradient-bg text-white min-h-screen">
+    <header class="sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+            <span class="font-display text-lg tracking-wide">Glazo</span>
+          </div>
+          <div class="hidden md:flex items-center gap-6 text-sm text-white/80">
+            <a href="index.html#services" class="hover:text-white">Services</a>
+            <a href="index.html#portfolio" class="hover:text-white">Portfolio</a>
+            <a href="videos.html" class="hover:text-white">Vidéos</a>
+            <a href="index.html#contact" class="hover:text-white">Contact</a>
+            <a href="index.html#contact" class="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">
+              <span>Me contacter</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="max-w-6xl mx-auto px-4 py-10 md:py-14">
+        <h1 class="font-display text-3xl md:text-4xl mb-2">Toutes les vidéos</h1>
+
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <!-- Ajouts (liens fournis) -->
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/Z7H6g6GjSwo" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/Z7H6g6GjSwo" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/bzO7cSer04s" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/shorts/bzO7cSer04s" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/N_0jMszGsGA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=N_0jMszGsGA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/mh21iDqplv4" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=mh21iDqplv4" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/ZYl9EAPhcHY" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=ZYl9EAPhcHY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+
+          <!-- Exemples existants -->
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/HRxCigLKOFA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=HRxCigLKOFA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/VbWBuFPtlqY" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=VbWBuFPtlqY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/WWPTbR6uOqU" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=WWPTbR6uOqU" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/7_IszCKUqng" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=7_IszCKUqng" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/jLbvMOBwySY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=jLbvMOBwySY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="aspect-[16/9] w-full">
+              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/-XHLH_bICNI" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <a href="https://www.youtube.com/watch?v=-XHLH_bICNI" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          </div>
+        </div>
+
+
+      </section>
+    </main>
+
+    <footer class="py-10 text-center text-xs text-white/50">© <span id="y"></span> Glazo. Tous droits réservés.</footer>
+    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+    <!-- Script TikTok (optionnel si vous ajoutez des vidéos TikTok) -->
+    <!-- <script async src="https://www.tiktok.com/embed.js"></script> -->
+  </body>
+</html>
