@@ -47,6 +47,10 @@
       <h1 class="font-display text-3xl mb-6" data-i18n="auth_signup_title">Créer un compte</h1>
       <form id="signup-form" class="glass rounded-2xl p-6 grid gap-4">
         <div>
+          <label class="text-sm text-white/70">Pseudo</label>
+          <input id="displayName" type="text" maxlength="32" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" required />
+        </div>
+        <div>
           <label class="text-sm text-white/70" data-i18n="auth_email">Email</label>
           <input id="email" type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" required />
         </div>
@@ -65,7 +69,8 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-      import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { initializeFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4",
@@ -77,6 +82,7 @@
         measurementId: "G-DVFXY4ZJBT"
       };
       const app = initializeApp(firebaseConfig);
+      const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
       const auth = getAuth(app);
 
       const form = document.getElementById('signup-form');
@@ -88,11 +94,14 @@
         msg.textContent = '';
         const token = (await hcaptcha.getResponse()) || '';
         if (!token) { msg.textContent = 'Veuillez compléter le CAPTCHA.'; return; }
+        const displayName = document.getElementById('displayName').value.trim().slice(0,32);
+        if (!displayName) { msg.textContent = 'Veuillez saisir un pseudo.'; return; }
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         try {
           const cred = await createUserWithEmailAndPassword(auth, email, password);
           lastCreatedUser = cred.user;
+          try { await setDoc(doc(db, 'users', cred.user.uid), { displayName }, { merge: true }); } catch(_) {}
           await sendEmailVerification(cred.user);
           msg.textContent = 'Compte créé. Un email de vérification a été envoyé. Vérifiez votre boîte mail puis connectez-vous.';
         } catch (err) {

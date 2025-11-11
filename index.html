@@ -108,6 +108,11 @@
       body:not(.theme-light) .bg-white{ background-color:#7C3AED !important; color:#ffffff !important; }
       body:not(.theme-light) .hover\:bg-white\/90:hover{ background-color:#6D28D9 !important; color:#ffffff !important; }
     </style>
+    <style>
+      /* Rendre le menu Compte plus lisible (fond plus opaque) */
+      .account-panel{ background-color: rgba(0,0,0,0.6) !important; }
+      .theme-light .account-panel{ background-color: rgba(255,255,255,0.85) !important; }
+    </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
     <!-- Nav -->
@@ -136,9 +141,14 @@
             </select>
             <div class="relative flex items-center gap-2">
               <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
-              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
-                <div id="account-email" class="text-white/70 truncate mb-2">—</div>
-                <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
+              <div id="account-menu" class="hidden absolute right-0 top-full mt-2 w-64 glass account-panel rounded-xl p-3 text-sm origin-top-right transition duration-200 ease-out opacity-0 scale-95 translate-y-2 pointer-events-none z-50 max-h-80 overflow-y-auto">
+                <div class="mb-2">
+                  <div id="account-name" class="font-semibold">Utilisateur</div>
+                  <div id="account-email" class="text-white/70 truncate">—</div>
+                </div>
+                <a href="settings.html" class="block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Paramètres</a>
+                <a href="reviews.html" class="mt-1 block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Mes avis</a>
+                <button id="logout" class="mt-2 w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
               </div>
               <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
             </div>
@@ -190,9 +200,6 @@
             <h1 class="font-display text-4xl md:text-6xl font-semibold leading-tight" data-i18n-html="hero_h1_html">
               Montage vidéo <span class="text-transparent bg-clip-text animated-gradient" style="--g1:#7C3AED; --g2:#EC4899;">créatif</span> pour créateurs
             </h1>
-            <p class="mt-5 text-white/70 max-w-xl">
-              ............................TEXTE...............................................
-            </p>
             <div class="mt-8 flex flex-wrap items-center gap-3">
               <a href="#portfolio" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow" data-i18n="hero_cta_portfolio">
                 Voir portfolio
@@ -321,40 +328,68 @@
       </div>
     </section>
 
-    <!-- Contact -->
+    <!-- Contact (cards only) -->
     <section id="contact" class="relative">
       <div class="max-w-6xl mx-auto px-4 py-14 md:py-20">
-        <div class="grid md:grid-cols-2 gap-8 items-start">
-          <div>
-            <h2 class="font-display text-2xl md:text-3xl" data-i18n="contact_title">Contact :</h2>
-            <div class="mt-6 flex flex-col gap-3 text-sm">
-              <div class="glass px-4 py-2 rounded-xl hover:shadow-glow transition flex items-center justify-between">
-                <span class="select-text"><span data-i18n="contact_email_label">email :</span> glazo.montage@gmail.com</span>
-                <button id="copy-email" class="text-xs px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20">📋 Copier</button>
+        <div class="text-center mb-8">
+          <h2 class="font-display text-2xl md:text-3xl">Contact</h2>
+          <p class="mt-2 text-white/70">Discutons de ton projet et donnons-lui du rythme.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <!-- Email card -->
+          <div class="glass rounded-2xl p-5 hover:shadow-glow transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl animated-gradient flex items-center justify-center" style="--g1:#06B6D4; --g2:#7C3AED;">✉️</div>
+              <div class="flex-1">
+                <div class="text-sm text-white/60">Email</div>
+                <div class="select-text">glazo.montage@gmail.com</div>
               </div>
-              <a href="https://www.instagram.com/glazo.montage/" target="_blank" rel="noopener" class="glass px-4 py-2 rounded-xl hover:shadow-glow transition"><span data-i18n="contact_instagram_label">Instagram :</span> @glazo.montage</a>
-              <div class="glass px-4 py-2 rounded-xl hover:shadow-glow transition flex items-center justify-between">
-                <span class="select-text"><span data-i18n="contact_discord_label">Discord :</span> glazo_</span>
-                <button id="copy-discord" class="text-xs px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20">📋 Copier</button>
-              </div>
-
+              <button id="copy-email" class="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20">Copier</button>
             </div>
           </div>
-          <form class="glass rounded-2xl p-6 grid gap-4">
-            <div>
-              <label class="text-sm text-white/70" data-i18n="form_name_label">Nom</label>
-              <input class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_name_ph" placeholder="Ton nom"/>
+          <!-- Instagram card -->
+          <a href="https://www.instagram.com/glazo.montage/" target="_blank" rel="noopener" class="glass rounded-2xl p-5 hover:shadow-glow transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl animated-gradient flex items-center justify-center" style="--g1:#EC4899; --g2:#7C3AED;">📸</div>
+              <div>
+                <div class="text-sm text-white/60">Instagram</div>
+                <div>@glazo.montage</div>
+              </div>
             </div>
-            <div>
-              <label class="text-sm text-white/70" data-i18n="form_email_label">Email</label>
-              <input type="email" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_email_ph" placeholder="ton@email.com"/>
+          </a>
+          <!-- Discord card -->
+          <div class="glass rounded-2xl p-5 hover:shadow-glow transition">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl animated-gradient flex items-center justify-center" style="--g1:#7C3AED; --g2:#06B6D4;">💬</div>
+              <div class="flex-1">
+                <div class="text-sm text-white/60">Discord</div>
+                <div class="select-text">glazo_</div>
+              </div>
+              <button id="copy-discord" class="text-xs px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20">Copier</button>
             </div>
-            <div>
-              <label class="text-sm text-white/70" data-i18n="form_message_label">Message</label>
-              <textarea rows="4" class="mt-1 w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" data-i18n-placeholder="form_message_ph" placeholder="Parle-moi de ton projet..."></textarea>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full-width Banner CTA -->
+    <section class="relative">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="rounded-3xl overflow-hidden relative mt-2 mb-10">
+          <div class="absolute inset-0 animated-gradient opacity-60" style="--g1:#7C3AED; --g2:#EC4899;"></div>
+          <div class="relative z-10 py-16 md:py-24 px-6 md:px-14">
+            <h2 class="font-display text-3xl md:text-5xl font-semibold leading-tight">
+              Donnons vie à tes idées en vidéo
+            </h2>
+            <p class="mt-4 text-white/80 max-w-2xl">
+              Shorts, vidéos longues, jingles… Je m’occupe du montage, du rythme et de l’habillage pour un rendu pro et engageant.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a href="videos.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition shadow-glow">Voir mes vidéos</a>
+              <a href="reviews.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 transition">Voir les avis</a>
             </div>
-            <button type="button" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-black hover:bg-white/90 transition" data-i18n="form_send">Envoyer</button>
-          </form>
+          </div>
+          <img alt="Bannière" src="https://images.unsplash.com/photo-1524255684952-d7185b509571?q=80&w=1800&auto=format&fit=crop" class="relative z-0 w-full h-64 md:h-96 object-cover mix-blend-overlay"/>
         </div>
       </div>
     </section>
@@ -411,7 +446,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-      import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { initializeFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, limit, deleteDoc, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
@@ -425,12 +460,15 @@
       };
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
-      const db = getFirestore(app);
+      const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
 
       const accountBtn = document.getElementById('account-btn');
       const accountMenu = document.getElementById('account-menu');
       const accountEmail = document.getElementById('account-email');
       const logoutBtn = document.getElementById('logout');
+      const nickInput = document.getElementById('account-nick');
+      const nickSave = document.getElementById('account-nick-save');
+      const nickMsg = document.getElementById('account-nick-msg');
       const langSel = document.getElementById('lang');
       const themeBtn = document.getElementById('theme-toggle');
       const themeBtnM = document.getElementById('theme-toggle-m');
@@ -438,6 +476,24 @@
       const mobileMenu = document.getElementById('mobile-menu');
       const accountBtnM = document.getElementById('account-btn-m');
       const langSelM = document.getElementById('lang-m');
+
+      let currentDisplayName = '';
+      async function loadUserProfile(user){
+        currentDisplayName = '';
+        if (!user) return;
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists()){
+            const data = snap.data();
+            currentDisplayName = (data && data.displayName) ? String(data.displayName) : '';
+            // Mettre à jour immédiatement les libellés des boutons avec le pseudo
+            if (accountBtn) accountBtn.textContent = currentDisplayName || 'Mon compte';
+            if (accountBtnM) accountBtnM.textContent = currentDisplayName || 'Mon compte';
+            const n = document.getElementById('account-name');
+            if (n) n.textContent = currentDisplayName || 'Utilisateur';
+          }
+        }catch(e){ /* ignore */ }
+      }
 
       // THEME: apply saved theme
       const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -479,20 +535,45 @@
         langSel.addEventListener('change', ()=>{ langSelM.value = langSel.value; });
       }
 
+      // Helpers: animated account menu
+      function openAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.remove('hidden');
+        // next frame to allow transition
+        requestAnimationFrame(()=>{
+          accountMenu.classList.remove('opacity-0','scale-95','translate-y-2','pointer-events-none');
+          accountMenu.classList.add('opacity-100','scale-100','translate-y-0');
+        });
+      }
+      function closeAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.add('opacity-0','scale-95','translate-y-2','pointer-events-none');
+        accountMenu.classList.remove('opacity-100','scale-100','translate-y-0');
+        const onEnd = (e)=>{
+          if (e.propertyName !== 'opacity') return;
+          accountMenu.classList.add('hidden');
+          accountMenu.removeEventListener('transitionend', onEnd);
+        };
+        accountMenu.addEventListener('transitionend', onEnd);
+      }
+
       // Auth state UI
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
         if (user) {
           accountBtn.href = '#';
-          accountBtn.textContent = 'Mon compte';
+          accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
           if (accountEmail) accountEmail.textContent = user.email || '—';
-          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
-          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
+          accountBtn.onclick = (e)=>{ e.preventDefault(); const n = document.getElementById('account-name'); if (n) n.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Utilisateur'; if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          loadUserProfile(user);
         } else {
           accountBtn.href = 'login.html';
           // I18N gère le label quand déconnecté
-          if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountMenu) closeAccountMenu();
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
+          if (nickInput) nickInput.value = '';
+          currentDisplayName = '';
         }
       });
 
@@ -506,9 +587,11 @@
 
       // Fermer le menu au clic extérieur
       document.addEventListener('click', (e)=>{
-        if (!accountMenu || accountMenu.classList.contains('hidden')) return;
+        if (!accountMenu) return;
+        const open = !accountMenu.classList.contains('hidden');
+        if (!open) return;
         const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
-        if (!within) accountMenu.classList.add('hidden');
+        if (!within) closeAccountMenu();
       });
       // fermer menu mobile au clic lien
       if (mobileMenu) {
@@ -526,15 +609,31 @@
       const reviewError = document.getElementById('review-error');
 
       if (reviewForm && reviewText && reviewsList) {
-        // compteur de caractères
+        // --- Star rating UI (1-5) ---
+        let currentRating = 0;
+        const starsWrap = document.createElement('div');
+        starsWrap.id = 'review-stars';
+        starsWrap.className = 'flex items-center gap-1 mb-2';
+        for (let i=1; i<=5; i++){
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.dataset.v = String(i);
+          b.className = 'w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-lg';
+          b.textContent = '☆';
+          b.addEventListener('click', ()=>{
+            currentRating = i;
+            [...starsWrap.children].forEach((el, idx)=>{ el.textContent = (idx < i) ? '★' : '☆'; });
+          });
+          starsWrap.appendChild(b);
+        }
+        if (reviewForm.firstChild) reviewForm.insertBefore(starsWrap, reviewForm.firstChild.nextSibling);
+        else reviewForm.appendChild(starsWrap);
+
+        // compteur
         reviewText.addEventListener('input', ()=>{
           const len = reviewText.value.length;
           if (reviewCount) reviewCount.textContent = `${Math.min(len,300)}/300`;
-          if (len > 300) {
-            reviewText.value = reviewText.value.slice(0,300);
-            if (reviewError) reviewError.textContent = '300 caractères max.';
-            setTimeout(()=>{ if (reviewError) reviewError.textContent=''; }, 1500);
-          }
+          if (len > 300) { reviewText.value = reviewText.value.slice(0,300); if (reviewError) { reviewError.textContent = '300 caractères max.'; setTimeout(()=> reviewError.textContent='', 1500); } }
         });
 
         reviewForm.addEventListener('submit', async (e)=>{
@@ -542,50 +641,67 @@
           const text = reviewText.value.trim();
           if (!text) { if (reviewError) reviewError.textContent = 'Avis vide.'; return; }
           if (text.length > 300) { if (reviewError) reviewError.textContent = '300 caractères max.'; return; }
+          if (!(currentRating >=1 && currentRating <=5)) { if (reviewError) reviewError.textContent = 'Choisissez une note (1 à 5).'; return; }
           const user = auth.currentUser;
           if (!user) { alert('Veuillez vous connecter.'); return; }
           try {
             await addDoc(collection(db, 'reviews'), {
               uid: user.uid,
-              email: user.email || null,
+              displayName: currentDisplayName || 'Utilisateur',
+              rating: currentRating,
               text,
               createdAt: serverTimestamp(),
               createdAtMs: Date.now()
             });
             reviewText.value = '';
             if (reviewCount) reviewCount.textContent = '0/300';
+            currentRating = 0; [...starsWrap.children].forEach(el=> el.textContent = '☆');
           } catch (err) {
             if (reviewError) reviewError.textContent = "Erreur lors de l'envoi.";
           }
         });
 
         const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'), limit(3));
-        onSnapshot(q, (snap)=>{
+        const userNameCache = {};
+        async function getDisplayNameFor(uid){
+          if (!uid) return 'Utilisateur';
+          if (userNameCache[uid]) return userNameCache[uid];
+          try{
+            const u = await getDoc(doc(db, 'users', uid));
+            const name = (u.exists() && u.data() && u.data().displayName) ? String(u.data().displayName) : 'Utilisateur';
+            userNameCache[uid] = name;
+            return name;
+          }catch(e){ return 'Utilisateur'; }
+        }
+        async function loadHomeReviews(){
+          const snap = await getDocs(q);
           reviewsList.innerHTML = '';
-          if (snap.empty) {
-            reviewsList.innerHTML = '<div class="text-white/60">Aucun avis pour le moment.</div>';
-            return;
-          }
+          if (snap.empty) { reviewsList.innerHTML = '<div class="text-white/60">Aucun avis pour le moment.</div>'; return; }
           const current = auth.currentUser;
-          snap.forEach(d => {
+          for (const d of snap.docs){
             const r = d.data();
             const div = document.createElement('div');
-            div.className = 'glass rounded-xl p-4';
-            const who = r.email ? r.email : 'Utilisateur';
+            const name = r.displayName || await getDisplayNameFor(r.uid);
             const date = (r.createdAt && r.createdAt.toDate) ? r.createdAt.toDate() : (r.createdAtMs ? new Date(r.createdAtMs) : null);
             const safeText = String(r.text || '').replace(/</g, '&lt;');
             const canDel = current && current.uid === r.uid;
+            const rating = Math.max(0, Math.min(5, Number(r.rating||0)));
+            const stars = '★★★★★☆☆☆☆☆'.slice(5-rating,10-rating); // not used; build manually to ensure 5 chars
+            const starHtml = Array.from({length:5}).map((_,i)=> i<rating ? '★' : '☆').join('');
+            div.className = 'glass rounded-xl p-4';
             div.innerHTML = `
               <div class="flex items-center justify-between text-xs text-white/60">
-                <span>${who}${date ? ' — ' + date.toLocaleDateString() : ''}</span>
+                <span class="font-medium text-white/80">${name}</span>
                 ${canDel ? `<button class="review-del bg-white/10 hover:bg-white/20 px-2 py-1 rounded" data-id="${d.id}">Supprimer</button>` : ''}
               </div>
-              <div class="mt-1">${safeText}</div>`;
+              <div class="text-yellow-400/90 mt-1">${starHtml}</div>
+              <div class="mt-1">${safeText}</div>
+              <div class="mt-1 text-[11px] text-white/50">${date ? date.toLocaleDateString() : ''}</div>`;
             reviewsList.appendChild(div);
-          });
-        }, (err)=>{
-          reviewsList.innerHTML = '<div class="text-red-400 text-sm">Erreur de chargement des avis.</div>';
-        });
+          }
+        }
+        loadHomeReviews();
+        setInterval(loadHomeReviews, 20000);
 
         // suppression: délégation d'événements
         reviewsList.addEventListener('click', async (e)=>{
@@ -593,11 +709,8 @@
           if (!(t && t.classList && t.classList.contains('review-del'))) return;
           const id = t.getAttribute('data-id');
           if (!id) return;
-          try {
-            await deleteDoc(doc(db, 'reviews', id));
-          } catch(err) {
-            alert('Suppression impossible.');
-          }
+          try { await deleteDoc(doc(db, 'reviews', id)); await loadHomeReviews(); }
+          catch(err){ alert('Suppression impossible.'); }
         });
       }
     </script>

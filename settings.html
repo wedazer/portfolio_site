@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paramètres</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{ --bg1:#0a0f10; --bg2:#111827; }
+    .gradient-bg{ background: radial-gradient(1200px 800px at 10% -10%, #13252f 0%, transparent 60%), radial-gradient(1200px 800px at 110% 10%, #2c1740 0%, transparent 60%), linear-gradient(180deg, var(--bg1), var(--bg2)); }
+    .glass{ background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); backdrop-filter: blur(10px); }
+    .animated-gradient{ background: linear-gradient(90deg,var(--g1,#06B6D4),var(--g2,#7C3AED)); background-size:200% 200%; animation:ag 4s ease infinite; }
+    @keyframes ag{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    body.theme-light{ --bg1:#e6fbff; --bg2:#dff7ff; color:#0a0a12; }
+    .theme-light .glass{ background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.05); }
+    .theme-light .bg-white{ background-color:#06B6D4 !important; color:#0a0f10 !important; }
+    .theme-light .hover\:bg-white\/90:hover{ background-color:#0891B2 !important; color:#0a0f10 !important; }
+    .account-panel{ background-color: rgba(0,0,0,0.6) !important; }
+    .theme-light .account-panel{ background-color: rgba(255,255,255,0.85) !important; }
+
+    /* Alerts visibles pour feedback pseudo */
+    .alert{ border-radius: 12px; padding: 10px 12px; border:1px solid transparent; }
+    .alert-success{ background: rgba(16,185,129,0.28); border-color: rgba(16,185,129,0.50); color:#bbf7d0; }
+    .alert-error{ background: rgba(239,68,68,0.30); border-color: rgba(239,68,68,0.60); color:#fecaca; }
+    .theme-light .alert-success{ background:#d1fae5; border-color:#10b981; color:#065f46; }
+    .theme-light .alert-error{ background:#fee2e2; border-color:#ef4444; color:#991b1b; }
+
+    /* Modales plus opaques */
+    .modal-panel{ background: rgba(10,12,16,0.92) !important; border-color: rgba(255,255,255,0.18) !important; }
+    .theme-light .modal-panel{ background: rgba(255,255,255,0.95) !important; border-color: rgba(0,0,0,0.08) !important; }
+  </style>
+</head>
+<body class="gradient-bg text-white min-h-screen">
+  <header class="sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4">
+      <nav class="glass mt-4 rounded-2xl px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl animated-gradient" style="--g1:#7C3AED; --g2:#06B6D4;"></div>
+          <span class="font-display text-lg tracking-wide">Glazo</span>
+        </div>
+
+  <!-- Modal Aide -->
+  <div id="help-modal" class="fixed inset-0 hidden" style="z-index:9999;">
+    <div class="absolute inset-0 bg-black/80"></div>
+    <div class="relative max-w-lg mx-auto mt-16 glass modal-panel rounded-2xl p-6">
+      <h3 class="text-lg font-semibold">Aide • Sécurité du compte</h3>
+      <div class="text-sm text-white/70 mt-2 space-y-3">
+        <div>
+          <div class="font-semibold text-white/80">Réinitialiser par email</div>
+          <ul class="list-disc pl-5 mt-1">
+            <li>Entre ton email puis clique sur Envoyer.</li>
+            <li>Ouvre l’email reçu et suis le lien pour définir un nouveau mot de passe.</li>
+            <li>Si tu ne vois pas l’email, vérifie les spams.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold text-white/80">Réinitialiser par téléphone</div>
+          <ul class="list-disc pl-5 mt-1">
+            <li>Étape 1: saisis ton numéro, complète le reCAPTCHA, et envoie le code.</li>
+            <li>Étape 2: entre le code reçu par SMS, choisis un nouveau mot de passe et confirme.</li>
+            <li>Le bouton Changer s’active quand le code et les mots de passe sont valides.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold text-white/80">Changement d’email sécurisé</div>
+          <ul class="list-disc pl-5 mt-1">
+            <li>Réauthentifie-toi avec ton mot de passe.</li>
+            <li>Reçois un code SMS sur ton téléphone pour valider.</li>
+            <li>Applique le nouvel email et vérifie ta boîte de réception.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-3">
+        <button id="help-close" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal reset by email -->
+  <div id="reset-email-modal" class="fixed inset-0 hidden" style="z-index:9999;">
+    <div class="absolute inset-0 bg-black/80"></div>
+    <div class="relative max-w-md mx-auto mt-28 glass modal-panel rounded-2xl p-6">
+      <h3 class="text-lg font-semibold">Réinitialiser par email</h3>
+      <p class="text-sm text-white/70 mt-1">Saisis ton email pour recevoir un lien de réinitialisation.</p>
+      <ul class="text-xs text-white/60 mt-2 list-disc pl-5">
+        <li>Entre ton adresse email.</li>
+        <li>Ouvre le lien reçu pour définir un nouveau mot de passe.</li>
+      </ul>
+      <input id="reset-email" type="email" class="mt-3 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Votre email">
+      <div class="mt-4 flex items-center gap-3 justify-end">
+        <button id="reset-email-cancel" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+        <button id="reset-email-btn" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal reset by phone -->
+  <div id="reset-phone-modal" class="fixed inset-0 hidden" style="z-index:9999;">
+    <div class="absolute inset-0 bg-black/80"></div>
+    <div class="relative max-w-md mx-auto mt-24 glass modal-panel rounded-2xl p-6">
+      <h3 class="text-lg font-semibold">Réinitialiser par téléphone</h3>
+      <div id="phone-step-ind" class="text-xs text-white/60 mt-1">Étape 1/2</div>
+      <ul class="text-xs text-white/60 mt-2 list-disc pl-5">
+        <li>Étape 1: saisis ton numéro pour recevoir un code SMS.</li>
+        <li>Étape 2: entre le code et choisis un nouveau mot de passe.</li>
+      </ul>
+      <div id="step-phone-1" class="mt-2 grid gap-2">
+        <p class="text-sm text-white/70">Entre ton numéro pour recevoir un code.</p>
+        <input id="pwd-phone" type="tel" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Téléphone (+33...)">
+        <div id="recaptcha-container-pwd-modal"></div>
+        <div class="mt-3 flex items-center gap-3 justify-end">
+          <button id="reset-phone-cancel" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+          <button id="send-sms-pwd" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Envoyer code</button>
+        </div>
+      </div>
+      <div id="step-phone-2" class="mt-2 grid gap-2 hidden">
+        <p class="text-sm text-white/70">Saisis le code reçu et ton nouveau mot de passe.</p>
+        <input id="sms-code-pwd" type="text" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Code reçu par SMS">
+        <input id="new-pass" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Nouveau mot de passe (min 6)">
+        <input id="new-pass2" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Confirmer le mot de passe">
+        <div class="mt-3 flex items-center gap-3 justify-end">
+          <button id="reset-phone-back" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Retour</button>
+          <button id="apply-pass" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-50" disabled>Changer</button>
+        </div>
+      </div>
+      <!-- success overlay -->
+      <div id="phone-success" class="hidden absolute inset-0 flex items-center justify-center">
+        <div class="glass rounded-xl px-4 py-3 text-sm flex items-center gap-3">
+          <span>✅ Mot de passe changé</span>
+          <button id="phone-success-close" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        <a href="index.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20">Accueil</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-2xl md:text-3xl font-semibold">Paramètres du compte</h1>
+    <p class="text-white/70 mt-1 text-sm">Gère ton pseudo affiché publiquement.</p>
+
+    <div class="glass rounded-2xl p-6 mt-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <div class="text-sm text-white/60">Nom affiché</div>
+          <input id="nick-input" maxlength="32" class="mt-2 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Votre pseudo">
+          <button id="nick-save" class="mt-3 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Enregistrer</button>
+          <div id="nick-msg" class="mt-3 alert" role="status" aria-live="polite"></div>
+        </div>
+        <div>
+          <div class="text-sm text-white/60">Email (privé)</div>
+          <div id="email" class="mt-2 truncate">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass rounded-2xl p-6 mt-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Sécurité</h2>
+        <button id="open-help" data-modal-open="#help-modal" class="text-sm underline text-white/70 hover:text-white">Aide</button>
+      </div>
+      <div class="mt-4 grid md:grid-cols-2 gap-6">
+        <!-- Reset password: open modals -->
+        <div>
+          <div class="text-sm text-white/60">Réinitialiser le mot de passe</div>
+          <div class="mt-3 flex gap-2">
+            <button id="open-reset-email" data-modal-open="#reset-email-modal" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Par email</button>
+            <button id="open-reset-phone" data-modal-open="#reset-phone-modal" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Par téléphone</button>
+          </div>
+          <div id="pwd-msg" class="mt-2 alert" role="status" aria-live="polite"></div>
+        </div>
+
+        <!-- Change email with phone verification (garde) -->
+        <div>
+          <div class="text-sm text-white/60">Changer d’email (sécurisé)</div>
+          <div class="mt-2 grid gap-2">
+            <input id="chg-new-email" type="email" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Nouvel email">
+            <input id="chg-pass" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Mot de passe (réauth)">
+            <input id="chg-phone" type="tel" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Téléphone (+33...) SSR">
+            <div id="recaptcha-container"></div>
+            <div class="flex gap-2">
+              <button id="send-sms" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Envoyer code SMS</button>
+              <input id="sms-code" type="text" class="flex-1 rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Code reçu par SMS">
+            </div>
+            <button id="apply-email" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Appliquer le nouvel email</button>
+            <div id="chg-msg" class="alert mt-2" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone dangereuse déplacée en bas -->
+    <div class="glass rounded-2xl p-6 mt-6 border border-red-500/30">
+      <h2 class="text-lg font-semibold text-red-300">Zone dangereuse</h2>
+      <p class="text-sm text-white/70 mt-1">La suppression de votre compte est définitive.</p>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm text-white/60">Mot de passe (confirmation)</label>
+          <input id="del-pass" type="password" class="mt-2 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Votre mot de passe">
+        </div>
+        <div class="flex items-end">
+          <button id="del-btn" class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white w-full md:w-auto">Supprimer mon compte</button>
+        </div>
+      </div>
+      <div id="del-msg" class="mt-3 alert" role="status" aria-live="polite"></div>
+    </div>
+  </main>
+
+  <div id="confirm-modal" class="fixed inset-0 hidden" style="z-index:9999;">
+    <div class="absolute inset-0 bg-black/80"></div>
+    <div class="relative max-w-md mx-auto mt-28 glass modal-panel rounded-2xl p-6">
+      <h3 class="text-lg font-semibold">Confirmer la suppression</h3>
+      <p class="text-sm text-white/70 mt-1">Tapez <strong>SUPPRIMER</strong> pour activer le bouton.</p>
+      <input id="confirm-input" type="text" class="mt-3 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="SUPPRIMER">
+      <div class="mt-4 flex items-center gap-3 justify-end">
+        <button id="confirm-cancel" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Annuler</button>
+        <button id="confirm-ok" class="px-4 py-2 rounded-lg bg-red-600/50 text-white disabled:opacity-50" disabled>Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, reauthenticateWithCredential, EmailAuthProvider, deleteUser, sendPasswordResetEmail, updateEmail, RecaptchaVerifier, reauthenticateWithPhoneNumber, updatePassword } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+    import { initializeFirestore, doc, getDoc, setDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+    const firebaseConfig = { apiKey: 'AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4', authDomain: 'site-glazo.firebaseapp.com', projectId: 'site-glazo' };
+    const app = initializeApp(firebaseConfig);
+    const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
+    const auth = getAuth(app);
+
+    const emailEl = document.getElementById('email');
+    const nickInput = document.getElementById('nick-input');
+    const nickSave = document.getElementById('nick-save');
+    const nickMsg = document.getElementById('nick-msg');
+    const helpModal = document.getElementById('help-modal');
+    const openHelp = document.getElementById('open-help');
+    const helpClose = document.getElementById('help-close');
+    const pwdMsg = document.getElementById('pwd-msg');
+    const openResetEmail = document.getElementById('open-reset-email');
+    const openResetPhone = document.getElementById('open-reset-phone');
+    const resetEmailModal = document.getElementById('reset-email-modal');
+    const resetPhoneModal = document.getElementById('reset-phone-modal');
+    const resetEmailCancel = document.getElementById('reset-email-cancel');
+    const resetEmailBtn = document.getElementById('reset-email-btn');
+    const resetPhoneCancel = document.getElementById('reset-phone-cancel');
+    const resetPhoneBack = document.getElementById('reset-phone-back');
+    const stepPhone1 = document.getElementById('step-phone-1');
+    const stepPhone2 = document.getElementById('step-phone-2');
+    // Éléments Zone dangereuse (suppression compte)
+    const delPass = document.getElementById('del-pass');
+    const delBtn  = document.getElementById('del-btn');
+    const delMsg  = document.getElementById('del-msg');
+    let delReady = false;
+
+    console.info('[Settings] init elements', {
+      openResetEmail: !!openResetEmail,
+      openResetPhone: !!openResetPhone,
+      openHelp: !!openHelp,
+      resetEmailModal: !!resetEmailModal,
+      resetPhoneModal: !!resetPhoneModal,
+      helpModal: !!helpModal,
+      delBtn: !!delBtn
+    });
+    // Eléments pour réinit par téléphone (étape 2)
+    let smsConfPwd = null;
+    const sendSmsPwdBtn = document.getElementById('send-sms-pwd');
+    const smsCodePwd = document.getElementById('sms-code-pwd');
+    const newPass = document.getElementById('new-pass');
+    const newPass2 = document.getElementById('new-pass2');
+    const applyPassBtn = document.getElementById('apply-pass');
+    let phoneStepInd = document.getElementById('phone-step-ind');
+    function setPhoneStep(step){
+      try {
+        phoneStepInd = document.getElementById('phone-step-ind') || phoneStepInd;
+        if (phoneStepInd) phoneStepInd.textContent = (step === 1) ? 'Étape 1/2' : 'Étape 2/2';
+      } catch(_) { /* ignore */ }
+    }
+    const newEmailInput = document.getElementById('chg-new-email');
+    const chgPassInput = document.getElementById('chg-pass');
+    const phoneInput = document.getElementById('chg-phone');
+    const sendSmsBtn = document.getElementById('send-sms');
+    const smsCodeInput = document.getElementById('sms-code');
+    const applyEmailBtn = document.getElementById('apply-email');
+    let recaptcha = null;
+    let smsConf = null;
+
+    async function loadProfile(user){
+      if (!user) return;
+      emailEl.textContent = user.email || '—';
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists()){
+          const data = snap.data();
+          nickInput.value = (data && data.displayName) ? String(data.displayName) : '';
+        }
+      } catch(_) {
+        // ignore
+      }
+    }
+
+    function showPwdMsg(type, text){
+      if (!pwdMsg) return;
+      pwdMsg.classList.remove('alert-success','alert-error');
+      pwdMsg.classList.add(type === 'success' ? 'alert-success' : 'alert-error');
+      pwdMsg.textContent = text;
+      pwdMsg.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    function showChgMsg(type, text){
+      const el = document.getElementById('chg-msg');
+      if (!el) return;
+      el.classList.remove('alert-success','alert-error');
+      el.classList.add(type === 'success' ? 'alert-success' : 'alert-error');
+      el.textContent = text;
+      el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    // Modales: ouverture/fermeture sans animation (toggle hidden)
+    function showModal(el){
+      if (!el) return;
+      try { el.classList.remove('hidden'); }
+      catch(err){ console.error('[Modal] show error:', err); }
+    }
+    function hideModal(el){
+      if (!el) return;
+      try { el.classList.add('hidden'); }
+      catch(err){ console.error('[Modal] hide error:', err); }
+    }
+    let modalOpen = false;
+    function setOpenersDisabled(dis){
+      [openResetEmail, openResetPhone, openHelp].forEach(b=>{ if (b) b.disabled = !!dis; });
+    }
+    function setLoading(btn, loading, normalTxt, loadingTxt){
+      if (!btn) return;
+      btn.disabled = !!loading;
+      btn.textContent = loading ? loadingTxt : normalTxt;
+    }
+
+    if (openResetEmail){ 
+      openResetEmail.addEventListener('click', (e)=>{
+        e.preventDefault(); 
+        e.stopPropagation(); 
+        console.info('[Modal] open reset-email'); 
+        modalOpen = true; 
+        setOpenersDisabled(true); 
+        showModal(resetEmailModal); 
+      });
+    }
+    if (resetEmailCancel){ 
+      resetEmailCancel.addEventListener('click', (e)=>{
+        e.preventDefault(); 
+        e.stopPropagation(); 
+        hideModal(resetEmailModal); 
+        modalOpen = false; 
+        setOpenersDisabled(false); 
+      });
+    }
+    if (resetEmailBtn){
+      resetEmailBtn.addEventListener('click', async ()=>{
+        const email = (document.getElementById('reset-email')?.value||'').trim();
+        if (!email || !email.includes('@')){ showPwdMsg('error','Entrez un email valide.'); return; }
+        try {
+          setLoading(resetEmailBtn, true, 'Envoyer', 'Envoi...');
+          await sendPasswordResetEmail(auth, email);
+          hideModal(resetEmailModal);
+          modalOpen = false; setOpenersDisabled(false);
+          showPwdMsg('success','Email de réinitialisation envoyé.');
+        }
+        catch(e){ console.error('[Reset Email] error:', e); showPwdMsg('error', (e.code||e.message)||'Erreur.'); }
+        finally{ setLoading(resetEmailBtn, false, 'Envoyer', 'Envoi...'); }
+      });
+    }
+
+    function ensureRecaptcha(){
+      if (!recaptcha){ recaptcha = new RecaptchaVerifier(auth, 'recaptcha-container', { size:'normal' }); }
+      return recaptcha;
+    }
+
+    let recaptchaPwd = null;
+    function ensureRecaptchaPwd(){
+      if (!recaptchaPwd){ recaptchaPwd = new RecaptchaVerifier(auth, 'recaptcha-container-pwd-modal', { size:'normal' }); }
+      return recaptchaPwd;
+    }
+
+    if (sendSmsBtn){
+      sendSmsBtn.addEventListener('click', async ()=>{
+        const user = auth.currentUser; if (!user) { showChgMsg('error','Veuillez vous reconnecter.'); return; }
+        const phone = (phoneInput?.value||'').trim(); if (!phone){ showChgMsg('error','Entrez un numéro de téléphone.'); return; }
+        const pwd = (chgPassInput?.value||''); if (!pwd){ showChgMsg('error','Saisissez votre mot de passe.'); return; }
+        try{
+          setLoading(sendSmsBtn, true, 'Envoyer code SMS', 'Envoi...');
+          // Réauth par mot de passe d’abord
+          const cred = EmailAuthProvider.credential(user.email||'', pwd);
+          await reauthenticateWithCredential(user, cred);
+          // Envoi SMS pour vérification
+          const appVerifier = ensureRecaptcha();
+          smsConf = await reauthenticateWithPhoneNumber(user, phone, appVerifier);
+          showChgMsg('success','SMS envoyé. Saisissez le code puis validez l’email.');
+        }catch(e){ console.error('[Phone Reset] send SMS error:', e); showChgMsg('error',(e.code||e.message)||'Erreur envoi SMS.'); }
+        finally{ setLoading(sendSmsBtn, false, 'Envoyer code SMS', 'Envoi...'); }
+      });
+    }
+
+    if (applyEmailBtn){
+      applyEmailBtn.addEventListener('click', async ()=>{
+        const user = auth.currentUser; if (!user) { showChgMsg('error','Veuillez vous reconnecter.'); return; }
+        const code = (smsCodeInput?.value||'').trim(); if (!code){ showChgMsg('error','Entrez le code SMS.'); return; }
+        const newEmail = (newEmailInput?.value||'').trim(); if (!newEmail || !newEmail.includes('@')){ showChgMsg('error','Entrez un email valide.'); return; }
+        try{
+          setLoading(applyEmailBtn, true, 'Appliquer le nouvel email', 'Mise à jour...');
+          if (!smsConf){ showChgMsg('error','Veuillez d’abord envoyer et valider le SMS.'); return; }
+          await smsConf.confirm(code); // réauth via SMS
+          await updateEmail(user, newEmail);
+          showChgMsg('success','Email mis à jour. Vérifiez la boîte du nouvel email.');
+        }catch(e){ console.error('[Phone Reset] apply email error:', e); showChgMsg('error',(e.code||e.message)||'Erreur lors du changement d’email.'); }
+        finally{ setLoading(applyEmailBtn, false, 'Appliquer le nouvel email', 'Mise à jour...'); }
+      });
+    }
+
+    if (openResetPhone){ openResetPhone.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); console.info('[Modal] open reset-phone'); modalOpen = true; setOpenersDisabled(true); showModal(resetPhoneModal); stepPhone1.classList.remove('hidden'); stepPhone2.classList.add('hidden'); setPhoneStep(1); }); }
+    if (resetPhoneCancel){ resetPhoneCancel.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); hideModal(resetPhoneModal); modalOpen = false; setOpenersDisabled(false); }); }
+    if (resetPhoneBack){ resetPhoneBack.addEventListener('click', ()=>{ stepPhone2.classList.add('hidden'); stepPhone1.classList.remove('hidden'); setPhoneStep(1); }); }
+
+    if (applyPassBtn){
+      applyPassBtn.addEventListener('click', async ()=>{
+        if (!smsConfPwd){ showPwdMsg('error','Envoyez d’abord le code.'); return; }
+        const code = (smsCodePwd?.value||'').trim(); if (!code){ showPwdMsg('error','Entrez le code.'); return; }
+        const p1 = (newPass?.value||''); const p2 = (newPass2?.value||'');
+        if (!p1 || p1.length<6){ showPwdMsg('error','Mot de passe trop court.'); return; }
+        if (p1 !== p2){ showPwdMsg('error','Les mots de passe ne correspondent pas.'); return; }
+        try{
+          setLoading(applyPassBtn, true, 'Changer', 'Changement...');
+          await smsConfPwd.confirm(code);
+          await updatePassword(auth.currentUser, p1);
+          const ok = document.getElementById('phone-success');
+          if (ok){ ok.classList.remove('hidden'); }
+          showPwdMsg('success','Mot de passe changé.');
+        }catch(e){ console.error('[Phone Reset] apply pass error:', e); showPwdMsg('error',(e.code||e.message)||'Erreur de changement.'); }
+        finally{ setLoading(applyPassBtn, false, 'Changer', 'Changement...'); }
+      });
+    }
+
+    // Fermeture des modales au clic overlay
+    [resetEmailModal, resetPhoneModal, document.getElementById('confirm-modal'), document.getElementById('help-modal')]
+      .forEach(mod => { if (!mod) return; mod.addEventListener('click', (e)=>{ if (e.target === mod) { hideModal(mod); modalOpen = false; setOpenersDisabled(false); } }); });
+
+    // Délégation pour tous les boutons data-close-modal
+    const getModalRoot = (el)=> el && el.closest('[id$="-modal"]');
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-close-modal]');
+      if (!btn) return;
+      const root = getModalRoot(btn);
+      if (root){ hideModal(root); modalOpen = false; setOpenersDisabled(false); }
+    });
+
+    // Délégation pour l'ouverture via data-modal-open
+    document.addEventListener('click', (e)=>{
+      const opener = e.target.closest('[data-modal-open]');
+      if (!opener) return;
+      e.preventDefault();
+      const sel = opener.getAttribute('data-modal-open');
+      const mod = sel ? document.querySelector(sel) : null;
+      if (!mod) { console.warn('[Modal] target not found for', sel); return; }
+      modalOpen = true; setOpenersDisabled(true); showModal(mod);
+      if (mod.id === 'reset-phone-modal'){ stepPhone1.classList.remove('hidden'); stepPhone2.classList.add('hidden'); setPhoneStep(1); }
+    });
+
+    // Fermer par Échap
+    document.addEventListener('keydown', (e)=>{
+      if (e.key !== 'Escape') return;
+      const openMods = Array.from(document.querySelectorAll('[id$="-modal"]:not(.hidden)'));
+      openMods.forEach(m=> hideModal(m));
+      modalOpen = false; setOpenersDisabled(false);
+    });
+
+    function showMsg(type, text){
+      nickMsg.classList.remove('alert-success','alert-error');
+      nickMsg.classList.add(type === 'success' ? 'alert-success' : 'alert-error');
+      nickMsg.textContent = text;
+      nickMsg.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    nickSave.addEventListener('click', async ()=>{
+      const user = auth.currentUser; if(!user) return showMsg('error','Veuillez vous connecter.');
+      const val = nickInput.value.trim().slice(0,32);
+      if (!val){ return showMsg('error','Le pseudo ne peut pas être vide.'); }
+      try {
+        await setDoc(doc(db, 'users', user.uid), { displayName: val }, { merge: true });
+        showMsg('success','Pseudo enregistré.');
+        setTimeout(()=>{ nickMsg.textContent=''; nickMsg.classList.remove('alert-success','alert-error'); }, 2500);
+      }catch(e){
+        const detail = e && (e.code || e.message) ? ` (${e.code || e.message})` : '';
+        showMsg('error', 'Erreur lors de l\'enregistrement' + detail + '.');
+        setTimeout(()=>{ nickMsg.textContent=''; nickMsg.classList.remove('alert-success','alert-error'); }, 4000);
+      }
+    });
+
+    function showDelMsg(type, text){
+      if (!delMsg) return;
+      delMsg.classList.remove('alert-success','alert-error');
+      delMsg.classList.add(type === 'success' ? 'alert-success' : 'alert-error');
+      delMsg.textContent = text;
+      delMsg.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    const modal = document.getElementById('confirm-modal');
+    const confirmInput = document.getElementById('confirm-input');
+    const confirmOk = document.getElementById('confirm-ok');
+    const confirmCancel = document.getElementById('confirm-cancel');
+
+    function openModal(){ if (modal){ modal.classList.remove('hidden'); confirmInput.value=''; confirmOk.disabled = true; } }
+    function closeModal(){ if (modal){ modal.classList.add('hidden'); } }
+
+    if (confirmInput){
+      confirmInput.addEventListener('input', ()=>{
+        const v = confirmInput.value.trim();
+        confirmOk.disabled = (v !== 'SUPPRIMER');
+        confirmOk.className = v === 'SUPPRIMER' ? 'px-4 py-2 rounded-lg bg-red-600 text-white' : 'px-4 py-2 rounded-lg bg-red-600/50 text-white disabled:opacity-50';
+      });
+    }
+
+    async function performDeletion(){
+      const user = auth.currentUser;
+      if (!user) { showDelMsg('error','Veuillez vous reconnecter.'); return; }
+      const pwd = (delPass && delPass.value) ? String(delPass.value) : '';
+      if (!pwd) { showDelMsg('error','Veuillez saisir votre mot de passe pour confirmer.'); return; }
+      try {
+        const cred = EmailAuthProvider.credential(user.email || '', pwd);
+        await reauthenticateWithCredential(user, cred);
+        try { await deleteDoc(doc(db, 'users', user.uid)); } catch(_) {}
+        await deleteUser(user);
+        closeModal();
+        showDelMsg('success','Compte supprimé. Redirection...');
+        setTimeout(()=>{ window.location.href = 'index.html'; }, 1200);
+      } catch (e) {
+        const detail = e && (e.code || e.message) ? ` (${e.code || e.message})` : '';
+        closeModal();
+        showDelMsg('error','Impossible de supprimer le compte' + detail + '.');
+      }
+    }
+
+    // Désactiver le bouton tant que le mdp n'est pas validé
+    if (delBtn) delBtn.disabled = true;
+    let delValidateTimer = null;
+    async function validateDelPassword(){
+      const user = auth.currentUser;
+      if (!user) { delReady = false; if (delBtn) delBtn.disabled = true; return; }
+      const pwd = (delPass && delPass.value) ? String(delPass.value) : '';
+      if (!pwd){ delReady = false; if (delBtn) delBtn.disabled = true; return; }
+      try{
+        const cred = EmailAuthProvider.credential(user.email || '', pwd);
+        await reauthenticateWithCredential(user, cred);
+        delReady = true;
+        if (delBtn) delBtn.disabled = false;
+        showDelMsg('success','Mot de passe validé.');
+        setTimeout(()=>{ if (delMsg){ delMsg.textContent=''; delMsg.classList.remove('alert-success'); } }, 1500);
+      }catch(e){
+        delReady = false;
+        if (delBtn) delBtn.disabled = true;
+        showDelMsg('error','Mot de passe incorrect.');
+      }
+    }
+    if (delPass){
+      delPass.addEventListener('input', ()=>{
+        delReady = false; if (delBtn) delBtn.disabled = true;
+        if (delValidateTimer) clearTimeout(delValidateTimer);
+        delValidateTimer = setTimeout(validateDelPassword, 700);
+      });
+      delPass.addEventListener('blur', ()=>{
+        if (!delReady) validateDelPassword();
+      });
+    }
+    if (delBtn) {
+      delBtn.addEventListener('click', ()=>{
+        if (!delReady){ showDelMsg('error','Mot de passe incorrect.'); return; }
+        openModal();
+      });
+    }
+    if (confirmCancel){ confirmCancel.addEventListener('click', ()=>{ closeModal(); }); }
+    if (confirmOk){ confirmOk.addEventListener('click', ()=>{ if (!confirmOk.disabled) performDeletion(); }); }
+
+    onAuthStateChanged(auth, (user)=>{
+      if (!user) { window.location.href = 'login.html'; return; }
+      loadProfile(user);
+    });
+  </script>
+</body>
+</html>

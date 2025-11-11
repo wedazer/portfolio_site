@@ -1,3 +1,48 @@
+      if (nickSave && nickInput){
+        nickSave.addEventListener('click', async ()=>{
+          const user = auth.currentUser;
+          if (!user) { alert('Veuillez vous connecter.'); return; }
+          const val = nickInput.value.trim().slice(0,32);
+          try{
+            await setDoc(doc(db, 'users', user.uid), { displayName: val }, { merge: true });
+            currentDisplayName = val;
+            if (nickMsg) { nickMsg.textContent = 'Pseudo enregistré.'; setTimeout(()=> nickMsg.textContent='', 1500); }
+          }catch(err){ if (nickMsg) { nickMsg.textContent = 'Erreur, réessayez.'; setTimeout(()=> nickMsg.textContent='', 2000); } }
+        });
+      }
+      let currentDisplayName = '';
+      async function loadUserProfile(user){
+        currentDisplayName = '';
+        if (!user) return;
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists()){
+            const data = snap.data();
+            currentDisplayName = (data && data.displayName) ? String(data.displayName) : '';
+            if (nickInput) nickInput.value = currentDisplayName;
+          }
+        }catch(e){ /* ignore */ }
+      }
+      // Dropdown animé comme l'accueil
+      function openAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.remove('hidden');
+        requestAnimationFrame(()=>{
+          accountMenu.classList.remove('opacity-0','scale-95','translate-y-2','pointer-events-none');
+          accountMenu.classList.add('opacity-100','scale-100','translate-y-0');
+        });
+      }
+      function closeAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.add('opacity-0','scale-95','translate-y-2','pointer-events-none');
+        accountMenu.classList.remove('opacity-100','scale-100','translate-y-0');
+        const onEnd = (e)=>{
+          if (e.propertyName !== 'opacity') return;
+          accountMenu.classList.add('hidden');
+          accountMenu.removeEventListener('transitionend', onEnd);
+        };
+        accountMenu.addEventListener('transitionend', onEnd);
+      }
 <!doctype html>
 <html lang="fr">
   <head>
@@ -82,6 +127,9 @@
       .theme-light [data-i18n="cta.viewPortfolio"]{
         color:#0a0a12 !important;
       }
+      /* Rendre le menu Compte plus lisible (fond plus opaque) */
+      .account-panel{ background-color: rgba(0,0,0,0.6) !important; }
+      .theme-light .account-panel{ background-color: rgba(255,255,255,0.85) !important; }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -109,9 +157,14 @@
             </select>
             <div class="relative flex items-center gap-2">
               <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
-              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
-                <div id="account-email" class="text-white/70 truncate mb-2">—</div>
-                <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
+              <div id="account-menu" class="hidden absolute right-0 top-full mt-2 w-64 glass account-panel rounded-xl p-3 text-sm origin-top-right transition duration-200 ease-out opacity-0 scale-95 translate-y-2 pointer-events-none z-50 max-h-80 overflow-y-auto">
+                <div class="mb-2">
+                  <div id="account-name" class="font-semibold">Utilisateur</div>
+                  <div id="account-email" class="text-white/70 truncate">—</div>
+                </div>
+                <a href="settings.html" class="block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Paramètres</a>
+                <a href="reviews.html" class="mt-1 block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Mes avis</a>
+                <button id="logout" class="mt-2 w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
               </div>
               <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
             </div>
@@ -235,6 +288,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+      import { initializeFirestore, getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
@@ -248,11 +302,15 @@
       };
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
+      const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
 
       const accountBtn = document.getElementById('account-btn');
       const accountMenu = document.getElementById('account-menu');
       const accountEmail = document.getElementById('account-email');
       const logoutBtn = document.getElementById('logout');
+      const nickInput = document.getElementById('account-nick');
+      const nickSave = document.getElementById('account-nick-save');
+      const nickMsg = document.getElementById('account-nick-msg');
       const langSel = document.getElementById('lang');
       const themeBtn = document.getElementById('theme-toggle');
       const themeBtnM = document.getElementById('theme-toggle-m');
@@ -303,14 +361,17 @@
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
         if (user) {
-          if (accountBtn) { accountBtn.href = '#'; accountBtn.textContent = 'Mon compte'; }
+          if (accountBtn) { accountBtn.href = '#'; accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
           if (accountEmail) accountEmail.textContent = user.email || '—';
-          if (accountBtn) accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
-          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
+          if (accountBtn)    accountBtn.onclick = (e)=>{ e.preventDefault(); const n = document.getElementById('account-name'); if (n) n.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Utilisateur'; if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          loadUserProfile(user);
         } else {
           if (accountBtn) { accountBtn.href = 'login.html'; accountBtn.textContent = 'Compte / Se connecter'; }
-          if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountMenu) closeAccountMenu();
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
+          if (nickInput) nickInput.value = '';
+          currentDisplayName = '';
         }
       });
 
@@ -323,9 +384,11 @@
       }
 
       document.addEventListener('click', (e)=>{
-        if (!accountMenu || accountMenu.classList.contains('hidden')) return;
+        if (!accountMenu) return;
+        const open = !accountMenu.classList.contains('hidden');
+        if (!open) return;
         const within = accountMenu.contains(e.target) || accountBtn.contains(e.target);
-        if (!within) accountMenu.classList.add('hidden');
+        if (!within) closeAccountMenu();
       });
       if (mobileMenu) {
         mobileMenu.addEventListener('click', (e)=>{

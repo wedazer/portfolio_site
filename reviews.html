@@ -87,8 +87,14 @@
             <a href="index.html#contact" class="hover:text-white">Contact</a>
             <div class="relative flex items-center gap-2">
               <a id="account-btn" href="login.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition shadow-glow">Compte / Se connecter</a>
-              <div id="account-menu" class="hidden absolute right-0 mt-2 w-52 glass rounded-xl p-3 text-sm">
+              <div id="account-menu" class="hidden absolute right-0 top-full mt-2 w-64 glass rounded-xl p-3 text-sm origin-top-right transition duration-200 ease-out opacity-0 scale-95 translate-y-2 pointer-events-none z-50 max-h-80 overflow-y-auto">
                 <div id="account-email" class="text-white/70 truncate mb-2">—</div>
+                <div class="mb-2">
+                  <label for="account-nick" class="block text-white/60 text-xs mb-1">Pseudo</label>
+                  <input id="account-nick" type="text" maxlength="32" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Votre pseudo">
+                  <button id="account-nick-save" class="mt-2 w-full px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Enregistrer le pseudo</button>
+                  <div id="account-nick-msg" class="mt-1 text-xs text-white/60"></div>
+                </div>
                 <button id="logout" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20">Se déconnecter</button>
               </div>
               <button id="theme-toggle" aria-label="Theme" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 transition">🌙</button>
@@ -144,7 +150,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-      import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { initializeFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
@@ -158,12 +164,15 @@
       };
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
-      const db = getFirestore(app);
+      const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
 
       const accountBtn = document.getElementById('account-btn');
       const accountMenu = document.getElementById('account-menu');
       const accountEmail = document.getElementById('account-email');
       const logoutBtn = document.getElementById('logout');
+      const nickInput = document.getElementById('account-nick');
+      const nickSave = document.getElementById('account-nick-save');
+      const nickMsg = document.getElementById('account-nick-msg');
       const themeBtn = document.getElementById('theme-toggle');
       const themeBtnM = document.getElementById('theme-toggle-m');
       const menuToggle = document.getElementById('menu-toggle');
@@ -193,19 +202,57 @@
         menuToggle.addEventListener('click', ()=>{ mobileMenu.classList.toggle('hidden'); });
       }
 
+      // Dropdown animé comme l'accueil
+      function openAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.remove('hidden');
+        requestAnimationFrame(()=>{
+          accountMenu.classList.remove('opacity-0','scale-95','translate-y-2','pointer-events-none');
+          accountMenu.classList.add('opacity-100','scale-100','translate-y-0');
+        });
+      }
+      function closeAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.add('opacity-0','scale-95','translate-y-2','pointer-events-none');
+        accountMenu.classList.remove('opacity-100','scale-100','translate-y-0');
+        const onEnd = (e)=>{
+          if (e.propertyName !== 'opacity') return;
+          accountMenu.classList.add('hidden');
+          accountMenu.removeEventListener('transitionend', onEnd);
+        };
+        accountMenu.addEventListener('transitionend', onEnd);
+      }
+
+      let currentDisplayName = '';
+      async function loadUserProfile(user){
+        currentDisplayName = '';
+        if (!user) return;
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists()){
+            const data = snap.data();
+            currentDisplayName = (data && data.displayName) ? String(data.displayName) : '';
+            if (nickInput) nickInput.value = currentDisplayName;
+          }
+        }catch(e){ /* ignore */ }
+      }
+
       onAuthStateChanged(auth, (user)=>{
         if (I18N && I18N.setAuthState) I18N.setAuthState(user);
         if (user) {
           accountBtn.href = '#';
-          if (accountBtn) accountBtn.textContent = 'Mon compte';
+          if (accountBtn) accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
           if (accountEmail) accountEmail.textContent = user.email || '—';
-          accountBtn.onclick = (e)=>{ e.preventDefault(); accountMenu.classList.toggle('hidden'); };
-          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = 'Mon compte'; }
+          accountBtn.onclick = (e)=>{ e.preventDefault(); const n = document.getElementById('account-name'); if (n) n.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Utilisateur'; if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
+          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          loadUserProfile(user);
         } else {
           accountBtn.href = 'login.html';
           if (accountBtn) accountBtn.textContent = 'Compte / Se connecter';
-          if (accountMenu) accountMenu.classList.add('hidden');
+          if (accountMenu) closeAccountMenu();
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
+          if (nickInput) nickInput.value = '';
+          currentDisplayName = '';
         }
 
         // Guard vs form
@@ -237,6 +284,19 @@
         });
       }
 
+      if (nickSave && nickInput){
+        nickSave.addEventListener('click', async ()=>{
+          const user = auth.currentUser;
+          if (!user) { alert('Veuillez vous connecter.'); return; }
+          const val = nickInput.value.trim().slice(0,32);
+          try{
+            await setDoc(doc(db, 'users', user.uid), { displayName: val }, { merge: true });
+            currentDisplayName = val;
+            if (nickMsg) { nickMsg.textContent = 'Pseudo enregistré.'; setTimeout(()=> nickMsg.textContent='', 1500); }
+          }catch(err){ if (nickMsg) { nickMsg.textContent = 'Erreur, réessayez.'; setTimeout(()=> nickMsg.textContent='', 2000); } }
+        });
+      }
+
       // Reviews listing + submit
       const reviewForm = document.getElementById('review-form');
       const reviewText = document.getElementById('review-text');
@@ -245,6 +305,26 @@
       const reviewError = document.getElementById('review-error');
 
       if (reviewForm && reviewText && reviewsList) {
+        // --- Star rating UI (1-5) ---
+        let currentRating = 0;
+        const starsWrap = document.createElement('div');
+        starsWrap.id = 'review-stars';
+        starsWrap.className = 'flex items-center gap-1 mb-2';
+        for (let i=1; i<=5; i++){
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.dataset.v = String(i);
+          b.className = 'w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-lg';
+          b.textContent = '☆';
+          b.addEventListener('click', ()=>{
+            currentRating = i;
+            [...starsWrap.children].forEach((el, idx)=>{ el.textContent = (idx < i) ? '★' : '☆'; });
+          });
+          starsWrap.appendChild(b);
+        }
+        if (reviewForm.firstChild) reviewForm.insertBefore(starsWrap, reviewForm.firstChild.nextSibling);
+        else reviewForm.appendChild(starsWrap);
+
         // compteur
         reviewText.addEventListener('input', ()=>{
           const len = reviewText.value.length;
@@ -261,41 +341,70 @@
           const text = reviewText.value.trim();
           if (!text) { if (reviewError) reviewError.textContent = 'Avis vide.'; return; }
           if (text.length > 300) { if (reviewError) reviewError.textContent = '300 caractères max.'; return; }
+          if (!(currentRating >=1 && currentRating <=5)) { if (reviewError) reviewError.textContent = 'Choisissez une note (1 à 5).'; return; }
           const user = auth.currentUser;
           if (!user) { alert('Veuillez vous connecter.'); return; }
+          const submitBtn = reviewForm.querySelector('button[type="submit"]');
+          if (submitBtn) submitBtn.disabled = true;
           try {
-            await addDoc(collection(db, 'reviews'), { uid: user.uid, email: user.email || null, text, createdAt: serverTimestamp(), createdAtMs: Date.now() });
+            await addDoc(collection(db, 'reviews'), { uid: user.uid, displayName: currentDisplayName || 'Utilisateur', rating: currentRating, text, createdAt: serverTimestamp(), createdAtMs: Date.now() });
             reviewText.value = '';
             if (reviewCount) reviewCount.textContent = '0/300';
+            currentRating = 0; [...starsWrap.children].forEach(el=> el.textContent = '☆');
           } catch(err) {
-            if (reviewError) reviewError.textContent = "Erreur lors de l'envoi.";
+            console.error('Erreur Firestore addDoc:', err);
+            if (reviewError) reviewError.textContent = (err && err.message) ? err.message : "Erreur lors de l'envoi.";
+          } finally {
+            if (submitBtn) submitBtn.disabled = false;
           }
         });
 
-        const q = query(collection(db, 'reviews'), orderBy('createdAtMs', 'desc'));
-        onSnapshot(q, (snap)=>{
+        const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
+        const userNameCache = {};
+        async function getDisplayNameFor(uid){
+          if (!uid) return 'Utilisateur';
+          if (userNameCache[uid]) return userNameCache[uid];
+          try{
+            const u = await getDoc(doc(db, 'users', uid));
+            const name = (u.exists() && u.data() && u.data().displayName) ? String(u.data().displayName) : 'Utilisateur';
+            userNameCache[uid] = name;
+            return name;
+          }catch(e){ return 'Utilisateur'; }
+        }
+        async function loadAllReviews(){
+          const snap = await getDocs(q);
           reviewsList.innerHTML = '';
           if (snap.empty) { reviewsList.innerHTML = '<div class="text-white/60">Aucun avis pour le moment.</div>'; return; }
           const current = auth.currentUser;
-          snap.forEach(d=>{
+          for (const d of snap.docs){
             const r = d.data();
-            const who = r.email ? r.email : 'Utilisateur';
+            const name = r.displayName || await getDisplayNameFor(r.uid);
             const date = (r.createdAt && r.createdAt.toDate) ? r.createdAt.toDate() : (r.createdAtMs ? new Date(r.createdAtMs) : null);
             const safeText = String(r.text || '').replace(/</g, '&lt;');
             const div = document.createElement('div');
             const canDel = current && current.uid === r.uid;
+            const rating = Math.max(0, Math.min(5, Number(r.rating||0)));
+            const starHtml = Array.from({length:5}).map((_,i)=> i<rating ? '★' : '☆').join('');
             div.className = 'glass rounded-xl p-4';
-            div.innerHTML = `<div class="flex items-center justify-between text-xs text-white/60"><span>${who}${date ? ' — ' + date.toLocaleDateString() : ''}</span>${canDel ? `<button class="review-del bg-white/10 hover:bg-white/20 px-2 py-1 rounded" data-id="${d.id}">Supprimer</button>`: ''}</div><div class="mt-1">${safeText}</div>`;
+            div.innerHTML = `<div class="flex items-center justify-between text-xs text-white/60">
+              <span class="font-medium text-white/80">${name}</span>
+              ${canDel ? `<button class=\"review-del bg-white/10 hover:bg-white/20 px-2 py-1 rounded\" data-id=\"${d.id}\">Supprimer</button>`: ''}
+            </div>
+            <div class="text-yellow-400/90 mt-1">${starHtml}</div>
+            <div class="mt-1">${safeText}</div>
+            <div class="mt-1 text-[11px] text-white/50">${date ? date.toLocaleDateString() : ''}</div>`;
             reviewsList.appendChild(div);
-          });
-        });
+          }
+        }
+        loadAllReviews();
+        setInterval(loadAllReviews, 20000);
 
         reviewsList.addEventListener('click', async (e)=>{
           const t = e.target;
           if (!(t && t.classList && t.classList.contains('review-del'))) return;
           const id = t.getAttribute('data-id');
           if (!id) return;
-          try { await deleteDoc(doc(db, 'reviews', id)); }
+          try { await deleteDoc(doc(db, 'reviews', id)); await loadAllReviews(); }
           catch(err){ alert('Suppression impossible.'); }
         });
       }
