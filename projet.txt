@@ -1,7 +1,0 @@
-je veux que tu fasse un compte genre admin avec un mdp que je dois mettre est un user juste sa ou un autre moyen sécuriser de se co est que l'on puisse faire des trucs de modérateur  avec jsp quoi mais tu vas trouve j'en suis sure 
-
-est aussi je veux que tu fasse un outils pour ajouter des vidéos super facilement juste je mette le liens est la vidéo s'ajoute dans galerie facilement 
-
-ajoute aussi un outils pour supprimer des vidéos facilement  
- 
-ajoute aussi un truc pour changer les vidéo qui sont dans la page home genre un truc je mette en favori est la vidéo s'ajoute dans la page home facilement mais que pour le compte admin ajoute aussi un truc pour supprimer les avis facilement  mais quand je clic sur supprimer il faut un autre message genre tu es sur de vouloir supprimer ce commentaire 
