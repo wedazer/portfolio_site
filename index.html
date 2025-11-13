@@ -110,8 +110,14 @@
     </style>
     <style>
       /* Rendre le menu Compte plus lisible (fond plus opaque) */
-      .account-panel{ background-color: rgba(0,0,0,0.6) !important; }
-      .theme-light .account-panel{ background-color: rgba(255,255,255,0.85) !important; }
+      /* Dropdown compte: plus joli et lisible */
+    .account-panel{ background-color: rgba(0,0,0,0.72) !important; border:1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+    .account-panel a, .account-panel button, .account-panel div{ color: rgba(255,255,255,0.92); }
+    .account-panel a, .account-panel button{ border-radius: 10px; }
+    .account-panel a:hover, .account-panel button:hover{ background-color: rgba(255,255,255,0.14) !important; }
+    .theme-light .account-panel{ background-color: rgba(255,255,255,0.92) !important; border:1px solid rgba(0,0,0,0.08); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+    .theme-light .account-panel a, .theme-light .account-panel button, .theme-light .account-panel div{ color:#0a0f10 !important; }
+    .theme-light .account-panel a:hover, .theme-light .account-panel button:hover{ background-color: rgba(6,182,212,0.16) !important; }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -128,7 +134,6 @@
             <a href="#services" class="hover:text-white">Services</a>
             <a href="#portfolio" class="hover:text-white">Portfolio</a>
             <a href="videos.html" class="hover:text-white">Vidéos</a>
-            <a href="login.html" class="hover:text-white">Compte</a>
             <a href="reviews.html" class="hover:text-white">Avis</a>
             <a href="#contact" class="hover:text-white">Contact</a>
             <select id="lang" class="ml-2 bg-white text-black rounded-xl px-3 py-2 outline-none">
@@ -561,15 +566,22 @@
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
         if (user) {
-          accountBtn.href = '#';
-          accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
+          if (accountBtn) {
+            accountBtn.href = '#';
+            accountBtn.classList.remove('w-10','h-10','justify-center');
+            accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
+            accountBtn.onclick = (e)=>{ e.preventDefault(); if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
+          }
           if (accountEmail) accountEmail.textContent = user.email || '—';
-          accountBtn.onclick = (e)=>{ e.preventDefault(); const n = document.getElementById('account-name'); if (n) n.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Utilisateur'; if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
-          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          if (accountBtnM) {
+            accountBtnM.href = '#';
+            accountBtnM.classList.remove('w-10','h-10','justify-center');
+            accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
+          }
           loadUserProfile(user);
+          ensureAdminLink(user);
         } else {
           accountBtn.href = 'login.html';
-          // I18N gère le label quand déconnecté
           if (accountMenu) closeAccountMenu();
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
           if (nickInput) nickInput.value = '';
@@ -584,6 +596,96 @@
           window.location.href = 'index.html';
         });
       }
+
+      // ===== Accès admin caché =====
+      const ADMIN_SECRET = 'GLZ-3N9Y-DF7Q-2025'; // code secret aléatoire
+
+      async function elevateToAdmin(user){
+        try { await setDoc(doc(db, 'users', user.uid), { role: 'admin' }, { merge: true }); alert('Mode admin activé.'); ensureAdminLink(user); }
+        catch(e){ console.error('elevateToAdmin error', e); }
+      }
+
+      async function ensureAdminLink(user){
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          const isAdmin = snap.exists() && snap.data() && snap.data().role === 'admin';
+          if (!isAdmin) return;
+          showAdminBadge();
+          let link = document.getElementById('admin-link');
+          if (!link){
+            if (!accountMenu) return;
+            link = document.createElement('a');
+            link.id = 'admin-link';
+            link.href = 'admin.html';
+            link.className = 'mt-1 block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20';
+            link.textContent = 'Admin';
+            const logoutRef = document.getElementById('logout');
+            if (logoutRef && logoutRef.parentElement === accountMenu){ accountMenu.insertBefore(link, logoutRef); }
+            else accountMenu.appendChild(link);
+          }
+        }catch(e){ console.warn('ensureAdminLink', e); }
+      }
+
+      function showAdminBadge(){
+        // Préfixe du titre
+        if (!document.title.startsWith('[ADMIN] ')) document.title = '[ADMIN] ' + document.title;
+        // Badge flottant
+        if (document.getElementById('admin-badge')) return;
+        const b = document.createElement('div');
+        b.id = 'admin-badge';
+        b.textContent = 'ADMIN';
+        b.style.position = 'fixed';
+        b.style.top = '12px';
+        b.style.right = '12px';
+        b.style.zIndex = '9999';
+        b.style.padding = '6px 10px';
+        b.style.borderRadius = '12px';
+        b.style.background = 'linear-gradient(135deg, rgba(124,58,237,.9), rgba(236,72,153,.9))';
+        b.style.boxShadow = '0 8px 24px rgba(0,0,0,.25)';
+        b.style.fontSize = '12px';
+        b.style.letterSpacing = '0.08em';
+        b.style.fontWeight = '700';
+        b.style.userSelect = 'none';
+        document.body.appendChild(b);
+      }
+
+      (function setupHiddenAdmin(){
+        const logo = document.querySelector('header .animated-gradient');
+        const brand = document.querySelector('header .font-display');
+        if (!logo && !brand) return;
+        let clicks = 0; let timer = null; let seq = '';
+        const need = 'GLAZO';
+        const handleClicks = ()=>{
+          clicks++; if (clicks === 1){ timer = setTimeout(()=>{ clicks=0; }, 600); }
+          if (clicks >= 3 && clicks <= 5){
+            clearTimeout(timer); clicks = 0; seq = '';
+            const onKey = (e)=>{
+              seq += (e.key||'').toUpperCase();
+              if (!need.startsWith(seq)) { window.removeEventListener('keydown', onKey); seq=''; return; }
+              if (seq === need){ window.removeEventListener('keydown', onKey); setTimeout(promptSecret, 10); }
+            };
+            window.addEventListener('keydown', onKey, { once:false });
+            setTimeout(()=>{ try{ window.removeEventListener('keydown', onKey); }catch(_){} }, 5000);
+          }
+        };
+        if (logo) logo.addEventListener('click', handleClicks);
+        if (brand) brand.addEventListener('click', handleClicks);
+
+        // Raccourci clavier discret de secours: Ctrl+Alt+G
+        window.addEventListener('keydown', (e)=>{
+          if (e.ctrlKey && e.altKey && (e.key||'').toLowerCase() === 'g'){
+            e.preventDefault(); promptSecret();
+          }
+        });
+
+        async function promptSecret(){
+          const user = auth.currentUser; if (!user){ alert('Connecte-toi d\'abord.'); return; }
+          const code = prompt('Code admin');
+          if (!code) return;
+          if (code === ADMIN_SECRET) { await elevateToAdmin(user); }
+          else { alert('Code incorrect'); }
+        }
+      })();
 
       // Fermer le menu au clic extérieur
       document.addEventListener('click', (e)=>{

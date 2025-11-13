@@ -1,48 +1,3 @@
-      if (nickSave && nickInput){
-        nickSave.addEventListener('click', async ()=>{
-          const user = auth.currentUser;
-          if (!user) { alert('Veuillez vous connecter.'); return; }
-          const val = nickInput.value.trim().slice(0,32);
-          try{
-            await setDoc(doc(db, 'users', user.uid), { displayName: val }, { merge: true });
-            currentDisplayName = val;
-            if (nickMsg) { nickMsg.textContent = 'Pseudo enregistré.'; setTimeout(()=> nickMsg.textContent='', 1500); }
-          }catch(err){ if (nickMsg) { nickMsg.textContent = 'Erreur, réessayez.'; setTimeout(()=> nickMsg.textContent='', 2000); } }
-        });
-      }
-      let currentDisplayName = '';
-      async function loadUserProfile(user){
-        currentDisplayName = '';
-        if (!user) return;
-        try{
-          const snap = await getDoc(doc(db, 'users', user.uid));
-          if (snap.exists()){
-            const data = snap.data();
-            currentDisplayName = (data && data.displayName) ? String(data.displayName) : '';
-            if (nickInput) nickInput.value = currentDisplayName;
-          }
-        }catch(e){ /* ignore */ }
-      }
-      // Dropdown animé comme l'accueil
-      function openAccountMenu(){
-        if (!accountMenu) return;
-        accountMenu.classList.remove('hidden');
-        requestAnimationFrame(()=>{
-          accountMenu.classList.remove('opacity-0','scale-95','translate-y-2','pointer-events-none');
-          accountMenu.classList.add('opacity-100','scale-100','translate-y-0');
-        });
-      }
-      function closeAccountMenu(){
-        if (!accountMenu) return;
-        accountMenu.classList.add('opacity-0','scale-95','translate-y-2','pointer-events-none');
-        accountMenu.classList.remove('opacity-100','scale-100','translate-y-0');
-        const onEnd = (e)=>{
-          if (e.propertyName !== 'opacity') return;
-          accountMenu.classList.add('hidden');
-          accountMenu.removeEventListener('transitionend', onEnd);
-        };
-        accountMenu.addEventListener('transitionend', onEnd);
-      }
 <!doctype html>
 <html lang="fr">
   <head>
@@ -128,8 +83,14 @@
         color:#0a0a12 !important;
       }
       /* Rendre le menu Compte plus lisible (fond plus opaque) */
-      .account-panel{ background-color: rgba(0,0,0,0.6) !important; }
-      .theme-light .account-panel{ background-color: rgba(255,255,255,0.85) !important; }
+      /* Dropdown compte: plus joli et lisible */
+      .account-panel{ background-color: rgba(0,0,0,0.72) !important; border:1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+      .account-panel a, .account-panel button, .account-panel div{ color: rgba(255,255,255,0.92); }
+      .account-panel a, .account-panel button{ border-radius: 10px; }
+      .account-panel a:hover, .account-panel button:hover{ background-color: rgba(255,255,255,0.14) !important; }
+      .theme-light .account-panel{ background-color: rgba(255,255,255,0.92) !important; border:1px solid rgba(0,0,0,0.08); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+      .theme-light .account-panel a, .theme-light .account-panel button, .theme-light .account-panel div{ color:#0a0f10 !important; }
+      .theme-light .account-panel a:hover, .theme-light .account-panel button:hover{ background-color: rgba(6,182,212,0.16) !important; }
     </style>
   </head>
   <body class="gradient-bg text-white min-h-screen">
@@ -206,77 +167,7 @@
       <section class="max-w-6xl mx-auto px-4 py-10 md:py-14">
         <h1 id="title-all-videos" class="font-display text-3xl md:text-4xl mb-2">Toutes les vidéos</h1>
 
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/Z7H6g6GjSwo" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/shorts/Z7H6g6GjSwo" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/bzO7cSer04s" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/shorts/bzO7cSer04s" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/N_0jMszGsGA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=N_0jMszGsGA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/mh21iDqplv4" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=mh21iDqplv4" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/ZYl9EAPhcHY" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=ZYl9EAPhcHY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-
-         
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/HRxCigLKOFA" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=HRxCigLKOFA" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/VbWBuFPtlqY" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=VbWBuFPtlqY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/WWPTbR6uOqU" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=WWPTbR6uOqU" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/7_IszCKUqng" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=7_IszCKUqng" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/jLbvMOBwySY" title="YouTube Shorts" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=jLbvMOBwySY" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-          <div class="glass rounded-2xl overflow-hidden">
-            <div class="aspect-[16/9] w-full">
-              <iframe class="w-full h-full" loading="lazy" src="https://www.youtube-nocookie.com/embed/-XHLH_bICNI" title="YouTube video" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <a href="https://www.youtube.com/watch?v=-XHLH_bICNI" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
-          </div>
-        </div>
+        <div id="videos-grid" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
 
       </section>
@@ -288,7 +179,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-      import { initializeFirestore, getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+      import { initializeFirestore, getDoc, setDoc, doc, getDocs, collection } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
       import { I18N } from "./assets/i18n.js";
 
       const firebaseConfig = {
@@ -308,9 +199,117 @@
       const accountMenu = document.getElementById('account-menu');
       const accountEmail = document.getElementById('account-email');
       const logoutBtn = document.getElementById('logout');
-      const nickInput = document.getElementById('account-nick');
-      const nickSave = document.getElementById('account-nick-save');
-      const nickMsg = document.getElementById('account-nick-msg');
+      // Affichage du pseudo depuis Firestore
+      let currentDisplayName = '';
+      async function loadUserProfile(user){
+        currentDisplayName = '';
+        if (!user) return;
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          if (snap.exists()){
+            const data = snap.data();
+            currentDisplayName = (data && data.displayName) ? String(data.displayName) : '';
+          }
+          // mettre à jour le libellé du bouton une fois le profil chargé
+          if (accountBtn) accountBtn.textContent = currentDisplayName || 'Mon compte';
+          if (accountBtnM) accountBtnM.textContent = currentDisplayName || 'Mon compte';
+        }catch(e){ /* ignore */ }
+      }
+
+      // ===== Admin helpers (badge + lien) =====
+      function showAdminBadge(){
+        if (!document.title.startsWith('[ADMIN] ')) document.title = '[ADMIN] ' + document.title;
+        if (document.getElementById('admin-badge')) return;
+        const b = document.createElement('div');
+        b.id = 'admin-badge'; b.textContent = 'ADMIN';
+        Object.assign(b.style, { position:'fixed', top:'12px', right:'12px', zIndex:'9999', padding:'6px 10px', borderRadius:'12px', background:'linear-gradient(135deg, rgba(124,58,237,.9), rgba(236,72,153,.9))', boxShadow:'0 8px 24px rgba(0,0,0,.25)', fontSize:'12px', letterSpacing:'0.08em', fontWeight:'700', userSelect:'none' });
+        document.body.appendChild(b);
+      }
+      async function ensureAdminLink(user){
+        try{
+          const snap = await getDoc(doc(db, 'users', user.uid));
+          const isAdmin = snap.exists() && snap.data() && snap.data().role === 'admin';
+          if (!isAdmin) return;
+          showAdminBadge();
+          let link = document.getElementById('admin-link');
+          if (!link){
+            if (!accountMenu) return;
+            link = document.createElement('a');
+            link.id = 'admin-link'; link.href = 'admin.html';
+            link.className = 'mt-1 block px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20';
+            link.textContent = 'Admin';
+            const logoutRef = document.getElementById('logout');
+            if (logoutRef && logoutRef.parentElement === accountMenu){ accountMenu.insertBefore(link, logoutRef); }
+            else accountMenu.appendChild(link);
+          }
+        }catch(_){}
+      }
+
+      // Dropdown animé comme l'accueil
+      function openAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.remove('hidden');
+        requestAnimationFrame(()=>{
+          accountMenu.classList.remove('opacity-0','scale-95','translate-y-2','pointer-events-none');
+          accountMenu.classList.add('opacity-100','scale-100','translate-y-0');
+        });
+
+      // ===== Rendu des vidéos depuis Firestore =====
+      const grid = document.getElementById('videos-grid');
+      function getYouTubeId(url){
+        try{
+          const u = new URL(url);
+          if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
+          if (u.searchParams.get('v')) return u.searchParams.get('v');
+          if (u.hostname.includes('youtube.com') && u.pathname.startsWith('/shorts/')) return u.pathname.split('/')[2];
+        }catch(_){}
+        return '';
+      }
+      function videoCard(v){
+        const wrap = document.createElement('div');
+        wrap.className = 'glass rounded-2xl overflow-hidden';
+        const plat = (v.platform||'').toLowerCase();
+        if (plat === 'youtube'){
+          const id = getYouTubeId(v.url||'');
+          const embed = id ? `https://www.youtube-nocookie.com/embed/${id}` : '';
+          wrap.innerHTML = `
+            <div class="aspect-[16/9] w-full">${embed ? `<iframe class="w-full h-full" loading="lazy" src="${embed}" title="YouTube" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>` : ''}</div>
+            <a href="${v.url}" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur YouTube ↗</a>
+          `;
+        } else {
+          // Cartes simples pour TikTok / Instagram (lien externe)
+          const label = plat === 'tiktok' ? 'TikTok' : (plat === 'instagram' ? 'Instagram' : 'Vidéo');
+          wrap.innerHTML = `
+            <div class="aspect-[16/9] w-full flex items-center justify-center text-white/60">${label}</div>
+            <a href="${v.url}" target="_blank" rel="noopener" class="block text-xs text-white/60 hover:text-white px-3 py-2">Ouvrir sur ${label} ↗</a>
+          `;
+        }
+        return wrap;
+      }
+      async function loadVideos(){
+        if (!grid) return;
+        grid.innerHTML = '';
+        try{
+          const snap = await getDocs(collection(db, 'videos'));
+          if (snap.empty){ grid.innerHTML = '<div class="text-white/60">Aucune vidéo.</div>'; return; }
+          snap.forEach(d=>{ const v = d.data(); grid.appendChild(videoCard(v)); });
+        }catch(e){ grid.innerHTML = '<div class="text-red-400">Impossible de charger les vidéos.</div>'; }
+      }
+
+      // Charger les vidéos au chargement
+      loadVideos();
+      }
+      function closeAccountMenu(){
+        if (!accountMenu) return;
+        accountMenu.classList.add('opacity-0','scale-95','translate-y-2','pointer-events-none');
+        accountMenu.classList.remove('opacity-100','scale-100','translate-y-0');
+        const onEnd = (e)=>{
+          if (e.propertyName !== 'opacity') return;
+          accountMenu.classList.add('hidden');
+          accountMenu.removeEventListener('transitionend', onEnd);
+        };
+        accountMenu.addEventListener('transitionend', onEnd);
+      }
       const langSel = document.getElementById('lang');
       const themeBtn = document.getElementById('theme-toggle');
       const themeBtnM = document.getElementById('theme-toggle-m');
@@ -361,16 +360,24 @@
       onAuthStateChanged(auth, (user)=>{
         I18N.setAuthState(user);
         if (user) {
-          if (accountBtn) { accountBtn.href = '#'; accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          if (accountBtn) {
+            accountBtn.href = '#';
+            accountBtn.classList.remove('w-10','h-10','justify-center');
+            accountBtn.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
+          }
           if (accountEmail) accountEmail.textContent = user.email || '—';
           if (accountBtn)    accountBtn.onclick = (e)=>{ e.preventDefault(); const n = document.getElementById('account-name'); if (n) n.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Utilisateur'; if (accountMenu.classList.contains('hidden')) openAccountMenu(); else closeAccountMenu(); };
-          if (accountBtnM) { accountBtnM.href = '#'; accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte'; }
+          if (accountBtnM) {
+            accountBtnM.href = '#';
+            accountBtnM.classList.remove('w-10','h-10','justify-center');
+            accountBtnM.textContent = (typeof currentDisplayName!== 'undefined' && currentDisplayName) ? currentDisplayName : 'Mon compte';
+          }
           loadUserProfile(user);
+          ensureAdminLink(user);
         } else {
           if (accountBtn) { accountBtn.href = 'login.html'; accountBtn.textContent = 'Compte / Se connecter'; }
           if (accountMenu) closeAccountMenu();
           if (accountBtnM) { accountBtnM.href = 'login.html'; accountBtnM.textContent = 'Compte / Se connecter'; }
-          if (nickInput) nickInput.value = '';
           currentDisplayName = '';
         }
       });

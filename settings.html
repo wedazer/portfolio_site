@@ -47,31 +47,13 @@
     <div class="absolute inset-0 bg-black/80"></div>
     <div class="relative max-w-lg mx-auto mt-16 glass modal-panel rounded-2xl p-6">
       <h3 class="text-lg font-semibold">Aide • Sécurité du compte</h3>
-      <div class="text-sm text-white/70 mt-2 space-y-3">
-        <div>
-          <div class="font-semibold text-white/80">Réinitialiser par email</div>
-          <ul class="list-disc pl-5 mt-1">
-            <li>Entre ton email puis clique sur Envoyer.</li>
-            <li>Ouvre l’email reçu et suis le lien pour définir un nouveau mot de passe.</li>
-            <li>Si tu ne vois pas l’email, vérifie les spams.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="font-semibold text-white/80">Réinitialiser par téléphone</div>
-          <ul class="list-disc pl-5 mt-1">
-            <li>Étape 1: saisis ton numéro, complète le reCAPTCHA, et envoie le code.</li>
-            <li>Étape 2: entre le code reçu par SMS, choisis un nouveau mot de passe et confirme.</li>
-            <li>Le bouton Changer s’active quand le code et les mots de passe sont valides.</li>
-          </ul>
-        </div>
-        <div>
-          <div class="font-semibold text-white/80">Changement d’email sécurisé</div>
-          <ul class="list-disc pl-5 mt-1">
-            <li>Réauthentifie-toi avec ton mot de passe.</li>
-            <li>Reçois un code SMS sur ton téléphone pour valider.</li>
-            <li>Applique le nouvel email et vérifie ta boîte de réception.</li>
-          </ul>
-        </div>
+      <div class="text-sm text-white/70 mt-2">
+        <div class="font-semibold text-white/80">Réinitialiser par email</div>
+        <ul class="list-disc pl-5 mt-1">
+          <li>Entre ton email puis clique sur Envoyer.</li>
+          <li>Ouvre l’email reçu et suis le lien pour définir un nouveau mot de passe.</li>
+          <li>Si tu ne vois pas l’email, vérifie les spams.</li>
+        </ul>
       </div>
       <div class="mt-4 flex items-center justify-end gap-3">
         <button id="help-close" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
@@ -97,44 +79,6 @@
     </div>
   </div>
 
-  <!-- Modal reset by phone -->
-  <div id="reset-phone-modal" class="fixed inset-0 hidden" style="z-index:9999;">
-    <div class="absolute inset-0 bg-black/80"></div>
-    <div class="relative max-w-md mx-auto mt-24 glass modal-panel rounded-2xl p-6">
-      <h3 class="text-lg font-semibold">Réinitialiser par téléphone</h3>
-      <div id="phone-step-ind" class="text-xs text-white/60 mt-1">Étape 1/2</div>
-      <ul class="text-xs text-white/60 mt-2 list-disc pl-5">
-        <li>Étape 1: saisis ton numéro pour recevoir un code SMS.</li>
-        <li>Étape 2: entre le code et choisis un nouveau mot de passe.</li>
-      </ul>
-      <div id="step-phone-1" class="mt-2 grid gap-2">
-        <p class="text-sm text-white/70">Entre ton numéro pour recevoir un code.</p>
-        <input id="pwd-phone" type="tel" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Téléphone (+33...)">
-        <div id="recaptcha-container-pwd-modal"></div>
-        <div class="mt-3 flex items-center gap-3 justify-end">
-          <button id="reset-phone-cancel" type="button" data-close-modal class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
-          <button id="send-sms-pwd" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Envoyer code</button>
-        </div>
-      </div>
-      <div id="step-phone-2" class="mt-2 grid gap-2 hidden">
-        <p class="text-sm text-white/70">Saisis le code reçu et ton nouveau mot de passe.</p>
-        <input id="sms-code-pwd" type="text" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Code reçu par SMS">
-        <input id="new-pass" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Nouveau mot de passe (min 6)">
-        <input id="new-pass2" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Confirmer le mot de passe">
-        <div class="mt-3 flex items-center gap-3 justify-end">
-          <button id="reset-phone-back" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Retour</button>
-          <button id="apply-pass" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-50" disabled>Changer</button>
-        </div>
-      </div>
-      <!-- success overlay -->
-      <div id="phone-success" class="hidden absolute inset-0 flex items-center justify-center">
-        <div class="glass rounded-xl px-4 py-3 text-sm flex items-center gap-3">
-          <span>✅ Mot de passe changé</span>
-          <button id="phone-success-close" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20">Fermer</button>
-        </div>
-      </div>
-    </div>
-  </div>
         <a href="index.html" class="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20">Accueil</a>
       </nav>
     </div>
@@ -170,27 +114,11 @@
           <div class="text-sm text-white/60">Réinitialiser le mot de passe</div>
           <div class="mt-3 flex gap-2">
             <button id="open-reset-email" data-modal-open="#reset-email-modal" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Par email</button>
-            <button id="open-reset-phone" data-modal-open="#reset-phone-modal" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Par téléphone</button>
           </div>
           <div id="pwd-msg" class="mt-2 alert" role="status" aria-live="polite"></div>
         </div>
 
-        <!-- Change email with phone verification (garde) -->
-        <div>
-          <div class="text-sm text-white/60">Changer d’email (sécurisé)</div>
-          <div class="mt-2 grid gap-2">
-            <input id="chg-new-email" type="email" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Nouvel email">
-            <input id="chg-pass" type="password" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Mot de passe (réauth)">
-            <input id="chg-phone" type="tel" class="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Téléphone (+33...) SSR">
-            <div id="recaptcha-container"></div>
-            <div class="flex gap-2">
-              <button id="send-sms" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Envoyer code SMS</button>
-              <input id="sms-code" type="text" class="flex-1 rounded-lg bg-white/5 border border-white/10 px-3 py-2 outline-none focus:border-white/20" placeholder="Code reçu par SMS">
-            </div>
-            <button id="apply-email" class="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20">Appliquer le nouvel email</button>
-            <div id="chg-msg" class="alert mt-2" role="status" aria-live="polite"></div>
-          </div>
-        </div>
+        <!-- (section supprimée: changement d’email sécurisé via SMS) -->
       </div>
     </div>
 
@@ -270,6 +198,7 @@
     // Eléments pour réinit par téléphone (étape 2)
     let smsConfPwd = null;
     const sendSmsPwdBtn = document.getElementById('send-sms-pwd');
+    const pwdPhoneInput = document.getElementById('pwd-phone');
     const smsCodePwd = document.getElementById('sms-code-pwd');
     const newPass = document.getElementById('new-pass');
     const newPass2 = document.getElementById('new-pass2');
@@ -426,6 +355,82 @@
     if (openResetPhone){ openResetPhone.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); console.info('[Modal] open reset-phone'); modalOpen = true; setOpenersDisabled(true); showModal(resetPhoneModal); stepPhone1.classList.remove('hidden'); stepPhone2.classList.add('hidden'); setPhoneStep(1); }); }
     if (resetPhoneCancel){ resetPhoneCancel.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); hideModal(resetPhoneModal); modalOpen = false; setOpenersDisabled(false); }); }
     if (resetPhoneBack){ resetPhoneBack.addEventListener('click', ()=>{ stepPhone2.classList.add('hidden'); stepPhone1.classList.remove('hidden'); setPhoneStep(1); }); }
+
+    // reCAPTCHA pour la modale téléphone (déjà défini plus haut)
+
+    // Utilitaires téléphone
+    function normalizePhone(raw){
+      if (!raw) return '';
+      let s = String(raw).replace(/[^+\d]/g,''); // supprime espaces, points, tirets
+      if (s.startsWith('00')) s = '+' + s.slice(2);
+      // Cas France: 0XXXXXXXXX -> +33XXXXXXXXX
+      if (s.startsWith('0') && s.length === 10) s = '+33' + s.slice(1);
+      return s;
+    }
+    function isE164(p){ return /^\+\d{6,15}$/.test(p); }
+
+    // Validation en direct du numéro (active/désactive le bouton)
+    function updateSmsSendState(){
+      if (!sendSmsPwdBtn) return;
+      const raw = (pwdPhoneInput?.value||'').trim();
+      const norm = normalizePhone(raw);
+      sendSmsPwdBtn.disabled = !isE164(norm);
+      if (!isE164(norm)){
+        showPwdMsg('error','Format: +33XXXXXXXXX (pas d’espaces)');
+      } else {
+        showPwdMsg('success','Numéro valide.');
+        setTimeout(()=>{ const el = document.getElementById('pwd-msg'); if (el){ el.textContent=''; el.classList.remove('alert-success'); } }, 1200);
+      }
+    }
+    if (pwdPhoneInput){ pwdPhoneInput.addEventListener('input', updateSmsSendState); }
+
+    // Envoi du code SMS (étape 1 -> 2)
+    if (sendSmsPwdBtn){
+      sendSmsPwdBtn.addEventListener('click', async ()=>{
+        let phone = (document.getElementById('pwd-phone')?.value||'').trim();
+        phone = normalizePhone(phone);
+        if (!phone){ showPwdMsg('error','Entrez un numéro de téléphone.'); return; }
+        if (!isE164(phone)){ showPwdMsg('error','Numéro invalide. Utilisez le format international, ex: +33XXXXXXXXX'); return; }
+        try{
+          setLoading(sendSmsPwdBtn, true, 'Envoyer code', 'Envoi...');
+          const appVerifier = ensureRecaptchaPwd();
+          smsConfPwd = await reauthenticateWithPhoneNumber(auth.currentUser, phone, appVerifier);
+          stepPhone1.classList.add('hidden');
+          stepPhone2.classList.remove('hidden');
+          setPhoneStep(2);
+          showPwdMsg('success','Code SMS envoyé.');
+        }catch(e){
+          console.error('[Phone Reset] send code error:', e);
+          const code = e && e.code ? String(e.code) : '';
+          if (code === 'auth/invalid-phone-number'){
+            showPwdMsg('error','Numéro invalide. Ex: +33XXXXXXXXX');
+          } else if (code === 'auth/too-many-requests'){
+            showPwdMsg('error','Trop de tentatives. Réessayez plus tard.');
+          } else if (code === 'auth/missing-phone-number'){
+            showPwdMsg('error','Numéro requis.');
+          } else if (code === 'auth/operation-not-allowed'){
+            showPwdMsg('error','La connexion par téléphone n’est pas activée dans Firebase.');
+          } else {
+            showPwdMsg('error',(e && (e.message))||'Erreur lors de l’envoi du code.');
+          }
+        }finally{
+          setLoading(sendSmsPwdBtn, false, 'Envoyer code', 'Envoi...');
+        }
+      });
+    }
+
+    // Activer/ désactiver le bouton Changer en fonction des champs saisis
+    function updateApplyState(){
+      if (!applyPassBtn) return;
+      const codeOk = !!(smsCodePwd?.value||'').trim();
+      const p1 = (newPass?.value||'');
+      const p2 = (newPass2?.value||'');
+      const passOk = !!p1 && p1.length>=6 && p1===p2;
+      applyPassBtn.disabled = !(codeOk && passOk);
+    }
+    if (smsCodePwd){ smsCodePwd.addEventListener('input', updateApplyState); }
+    if (newPass){ newPass.addEventListener('input', updateApplyState); }
+    if (newPass2){ newPass2.addEventListener('input', updateApplyState); }
 
     if (applyPassBtn){
       applyPassBtn.addEventListener('click', async ()=>{

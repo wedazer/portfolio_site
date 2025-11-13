@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin • Glazo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body{ background: linear-gradient(135deg,#0b0b12 0%, #0e0b17 100%); color:#fff; font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+      .glass{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border:1px solid rgba(255,255,255,0.1); }
+      .input{ width:100%; border-radius:12px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); padding:10px 12px; outline:none; color:#fff; }
+      .input:hover{ border-color: rgba(255,255,255,0.28); }
+      .input:focus{ border-color: rgba(255,255,255,0.4); box-shadow: 0 0 0 3px rgba(124,58,237,0.25); }
+      select.input{ appearance: none; background-image: linear-gradient(45deg,transparent 50%, rgba(255,255,255,0.7) 50%), linear-gradient(135deg, rgba(255,255,255,0.7) 50%, transparent 50%); background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px); background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; padding-right: 36px; }
+      option{ color:#0a0f10; }
+      .btn{ border-radius:12px; background:rgba(255,255,255,0.12); padding:10px 14px; color:#fff; border:1px solid rgba(255,255,255,0.18); }
+      .btn:hover{ background:rgba(255,255,255,0.2); }
+    </style>
+  </head>
+  <body class="min-h-screen">
+    <header class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-white/80 hover:text-white">← Retour</a>
+      <h1 class="text-xl font-semibold">Admin</h1>
+      <div></div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pb-16">
+      <section id="gate" class="glass rounded-2xl p-6 hidden">
+        <h2 class="text-lg font-semibold">Accès restreint</h2>
+        <p class="text-sm text-white/70 mt-1">Entre le code admin pour accéder.</p>
+        <div class="mt-3 flex items-center gap-2">
+          <input id="gate-code" type="password" class="input" placeholder="Code admin">
+          <button id="gate-validate" class="btn">Valider</button>
+        </div>
+        <div id="gate-msg" class="mt-2 text-sm text-white/70"></div>
+      </section>
+      <section class="glass rounded-2xl p-6">
+        <h2 class="text-lg font-semibold">Ajouter une vidéo</h2>
+        <div id="admin-msg" class="mt-2 text-sm text-white/70"></div>
+        <div class="mt-4 grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-white/70 mb-1">URL</label>
+            <input id="vid-url" type="url" class="input" placeholder="https://...">
+          </div>
+          <div>
+            <label class="block text-sm text-white/70 mb-1">Plateforme</label>
+            <select id="vid-platform" class="input">
+              <option value="youtube">YouTube</option>
+              <option value="tiktok">TikTok</option>
+              <option value="instagram">Instagram</option>
+            </select>
+          </div>
+          <div id="yt-kind-wrap">
+            <label class="block text-sm text-white/70 mb-1">Type (YouTube)</label>
+            <select id="yt-kind" class="input">
+              <option value="long">Longue</option>
+              <option value="short">Short</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button id="add-video" class="btn">Ajouter</button>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-6 mt-6">
+        <h2 class="text-lg font-semibold">Vidéos</h2>
+        <div id="list" class="mt-3 grid md:grid-cols-2 gap-3"></div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+      import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+      import { initializeFirestore, collection, addDoc, serverTimestamp, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+      const firebaseConfig = { apiKey: 'AIzaSyAbx4ixAtYFaIGsc69IChLyB0huNt1K5K4', authDomain: 'site-glazo.firebaseapp.com', projectId: 'site-glazo' };
+      const app = initializeApp(firebaseConfig);
+      const db = initializeFirestore(app, { experimentalForceLongPolling: true, useFetchStreams: false });
+      const auth = getAuth(app);
+
+      const addBtn = document.getElementById('add-video');
+      const urlEl = document.getElementById('vid-url');
+      const platEl = document.getElementById('vid-platform');
+      const kindWrap = document.getElementById('yt-kind-wrap');
+      const kindEl = document.getElementById('yt-kind');
+      const list = document.getElementById('list');
+      const msg = document.getElementById('admin-msg');
+      const gate = document.getElementById('gate');
+      const gateCode = document.getElementById('gate-code');
+      const gateValidate = document.getElementById('gate-validate');
+      const gateMsg = document.getElementById('gate-msg');
+
+      const ADMIN_SECRET = 'GLZ-3N9Y-DF7Q-2025';
+
+      platEl.addEventListener('change', ()=>{ kindWrap.style.display = platEl.value === 'youtube' ? 'block' : 'none'; });
+      kindWrap.style.display = platEl.value === 'youtube' ? 'block' : 'none';
+
+      function showMsg(t){ msg.textContent = t; }
+
+      async function ensureAdmin(user){
+        const uref = doc(db, 'users', user.uid);
+        const snap = await getDoc(uref);
+        return snap.exists() && snap.data().role === 'admin';
+      }
+
+      async function loadVideos(){
+        list.innerHTML = '';
+        const snap = await getDocs(collection(db, 'videos'));
+        snap.forEach(d=>{
+          const v = d.data();
+          const div = document.createElement('div');
+          div.className = 'glass rounded-xl p-4 flex items-center justify-between gap-3';
+          div.innerHTML = `<div class="min-w-0">
+            <div class="text-sm font-medium truncate">${(v.platform||'')}: ${(v.url||'')}</div>
+            <div class="text-xs text-white/60">${(v.kind||'')}${v.featured? ' • ★ en vedette' : ''}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn" data-act="toggle" data-id="${d.id}">${v.featured? 'Retirer ★' : 'Mettre ★'}</button>
+            <button class="btn" data-act="del" data-id="${d.id}">Supprimer</button>
+          </div>`;
+          list.appendChild(div);
+        });
+      }
+
+      onAuthStateChanged(auth, async (user)=>{
+        if (!user){ window.location.href = 'login.html'; return; }
+        const isAdmin = await ensureAdmin(user);
+        if (isAdmin){ gate.classList.add('hidden'); await loadVideos(); return; }
+        // Afficher la porte d’accès
+        gate.classList.remove('hidden');
+      });
+
+      addBtn.addEventListener('click', async ()=>{
+        const url = (urlEl.value||'').trim();
+        const platform = platEl.value;
+        const kind = platform === 'youtube' ? kindEl.value : '';
+        if (!url){ showMsg('URL requise'); return; }
+        try{
+          addBtn.disabled = true; addBtn.textContent = 'Ajout...';
+          await addDoc(collection(db, 'videos'), { url, platform, kind, featured:false, createdAt: serverTimestamp(), createdBy: (auth.currentUser&&auth.currentUser.uid)||'' });
+          urlEl.value=''; showMsg('Vidéo ajoutée.'); setTimeout(()=> showMsg(''), 1200);
+          await loadVideos();
+        }catch(e){ showMsg('Erreur: ' + (e.message||'')); }
+        finally{ addBtn.disabled=false; addBtn.textContent='Ajouter'; }
+      });
+
+      list.addEventListener('click', async (e)=>{
+        const b = e.target.closest('button');
+        if (!b) return;
+        const id = b.getAttribute('data-id');
+        const act = b.getAttribute('data-act');
+        if (!id || !act) return;
+        if (act === 'del'){
+          if (!confirm('Tu es sûr de vouloir supprimer cette vidéo ?')) return;
+          await deleteDoc(doc(db, 'videos', id));
+          await loadVideos();
+        } else if (act === 'toggle'){
+          const ref = doc(db, 'videos', id);
+          const snap = await getDoc(ref);
+          if (snap.exists()){
+            const cur = !!snap.data().featured;
+            await updateDoc(ref, { featured: !cur });
+            await loadVideos();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
